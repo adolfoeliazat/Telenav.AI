@@ -1,2 +1,4 @@
-# open-terra-open-ai
-Open Terra Open AI competition public repository
+**Traffic signs object detection using:**
+ * Retinanet: see /retinanet
+ * Segmentation: see /traffic_signs_segmentation
+
