@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TEST_ROI='rois_test.bin'
+TEST_ROI='/data/train_data/rois.bin'
 PREDICT_ROI='rois_retinanet.bin'
 RESULT_FILE='statistics.txt'
 

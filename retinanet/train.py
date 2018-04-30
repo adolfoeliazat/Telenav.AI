@@ -283,7 +283,7 @@ def main(args=None):
         epochs=args.epochs,
         verbose=1,
         callbacks=callbacks,
-        workers=32
+        workers=4
     )
 
 
