@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 CUDA_VISIBLE_DEVICES="0"
-WEIGHTS='./snapshots/traffic_signs_python35.h5'
+WEIGHTS='./snapshots/resnet100_traffic_signs_01.h5'
 TRAIN_META_FILE='/data/train_data/rois.bin'
 INPUT_PATH='/data/test_data'
 THRESHOLD_FILE="SAME"
