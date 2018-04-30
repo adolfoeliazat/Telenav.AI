@@ -6,7 +6,7 @@ TRAIN_META_FILE='/data/train_data/rois.bin'
 INPUT_PATH='/data/test_data'
 THRESHOLD_FILE="SAME"
 LOWEST_SCORE_THRESHOLD="0.5"
-OUTPUT_PATH='output'
+OUTPUT_PATH='/data/output'
 
 echo 'Parameters:'
 echo 'CUDA_VISIBLE_DEVICES='$CUDA_VISIBLE_DEVICES

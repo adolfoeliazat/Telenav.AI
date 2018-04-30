@@ -81,5 +81,3 @@ WORKDIR /home/$USERNAME
 COPY ./ ./python_modules
 RUN sudo chmod -R 777 ./python_modules/*
 WORKDIR /home/$USERNAME/python_modules/retinanet/tools
-
-CMD sh run_mq_predictor.sh
