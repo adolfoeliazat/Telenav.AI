@@ -1,0 +1,14 @@
+test_iter: 150
+test_interval: 404
+base_lr: 9.999999747378752e-05
+display: 45
+max_iter: 404
+lr_policy: "fixed"
+momentum: 0.8999999761581421
+weight_decay: 9.999999974752427e-07
+snapshot: 404
+snapshot_prefix: "/data/caffe_model//segmentation"
+solver_mode: GPU
+net: "./config//segmentation_train_val.prototxt"
+solver_type: ADAM
+iter_size: 56
