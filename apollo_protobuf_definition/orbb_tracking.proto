@@ -1,0 +1,15 @@
+package orbb;
+
+import "orbb_definitions.proto";
+import "orbb_metadata.proto";
+
+message RealObject {
+    required Mark   type   = 1;
+    required Region region = 2;
+    required float  width  = 3; // mm
+    required float  height = 4; // mm
+}
+
+message TrackingConfigMeta {
+    repeated RealObject trackable_objs = 1;
+}

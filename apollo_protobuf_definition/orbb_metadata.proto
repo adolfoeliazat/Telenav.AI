@@ -1,0 +1,119 @@
+package orbb;
+
+import "orbb_definitions.proto";
+
+message GPSPair
+{
+    required float latitude     = 1;
+    required float longitude    = 2;
+}
+
+message ProcessedSignLocalization
+{
+    required float      distance             = 1;
+    required float      angle_of_roi         = 2;
+    required float      angle_from_center    = 3;
+    required GPSPair    position             = 4;
+ }
+
+message VanishingPoint 
+{
+    required Point vp           = 1;
+    required float confidence   = 2;
+}
+
+message Detection 
+{
+    required Mark   type        = 1; // class of the detection
+    required double confidence  = 2; 
+}
+
+message SignComponent 
+{
+        required SignElement    type    = 1; // class of the subcomponent
+        required Rect           box     = 2; // bounding box of the subcomponent
+        optional string         value   = 3; // subcomponent may contain text
+}
+
+enum Validation 
+{
+        TRUE_POSITIVE   = 0;
+        TRUE_NEGATIVE   = 1;
+        FALSE_NEGATIVE  = 2;
+        FALSE_POSITIVE  = 3;
+        UNKNOWN         = 4;
+}
+
+message ImgRes // image resolution
+{
+    required float  width  = 1;
+    required float  height = 2;
+}
+
+message CameraRotation
+{
+    optional float yaw                = 1;  // camera rotation around vertical axis
+    optional float pitch              = 2;  // camera rotation around horizontal axis
+    optional float roll               = 3;  // camera rotation around Z axis
+}
+
+// Image sensor data, used as input for the positioning app
+message ImageSensorData
+{
+    required GPSPair raw_position     = 1; // raw coordinates of the input image
+    optional GPSPair matched_position = 2; // matched coordinates of the input image
+    optional float compass            = 3; // compass heading of the camera
+    required float heading            = 4; // gps calculated heading
+    required ImgRes img_res           = 5; // image resolution
+    required int32 timestamp          = 6; // timestamp of image creation
+    required float speed_kmh          = 7; // speed of the vehicle at the time of image creation
+    optional float gps_accuracy       = 8; // accuracy of the gps position in meters
+    required CameraRotation rotations  = 9; // camera rotation parameters
+}
+
+message MatchedWaySection 
+{
+    required sint64 way_id          = 1; // id of the osm way
+    required sint64 from_node_id    = 2; // from node 
+    required sint64 to_node_id      = 3; // to node 
+}
+
+message ImageMetadata
+{
+    required string trip_id     = 1; // id of the trip
+    required int32  image_index = 2; // index of the image in the trip
+    required string image_path  = 3; // path of the image on the OSC storage, contains file name
+}
+
+message Roi
+{
+    required Mark           type        = 1; // predominant class of detection
+    required Rect           rect        = 2; // detection bounding box
+    required bool           manual      = 3; // detection was manualy added or it was automated
+    optional string         algorithm   = 4; // the algorithm use for the automated detection
+    repeated Detection      detections  = 5; // all detection classes
+    optional Localization   local       = 6; // localization information of the actual detection not of the image
+    repeated SignComponent  components  = 7; // detection subcomponents
+    optional Validation     validation  = 8; // the detection was manually validated or invalidated
+    optional Polygon        polygon     = 9; // complex shape of the detection
+}
+
+message ImageFeatures
+{
+    optional VanishingPoint     vanishing_point = 1; // calculated image vanishing point
+}
+
+message Image 
+{    
+    required ImageSensorData    sensor_data     = 1; // data from the sensors
+    required ImageMetadata      metadata        = 2; // metadata
+    optional ImageFeatures      features        = 3; // extracted features
+    optional MatchedWaySection  matched_section = 4; // way where the image was matched
+    repeated Roi                rois            = 5; // detections
+}
+
+message Trip 
+{
+    required string trip_id     = 1; // id of the trip
+    repeated Image  images      = 2; // images contained in the trip
+}

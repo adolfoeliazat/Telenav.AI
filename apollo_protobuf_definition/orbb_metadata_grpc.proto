@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package orbb;
+
+// The greeting service definition.
+service Localization_service {
+// Sends a greeting
+    rpc Localize (Metadata) returns (Metadata) {}
+}
+
+message Point {
+    uint32 row = 1;
+    uint32 col = 2;
+}
+
+message Rect {
+    Point tl = 1;
+    Point br = 2;
+}
+
+enum Region {
+    REGION_INVALID  = 0;
+    US              = 1;
+    EU              = 2;
+}
+
+enum Mark {
+    MARK_INVALID                    = 0;
+    FACE                            = 1;
+    LICENSE_PLATE                   = 2;
+    SL_5                            = 33;
+    SL_10                           = 3;
+    SL_20                           = 4;
+    SL_30                           = 5;
+    SL_40                           = 6;
+    SL_50                           = 7;
+    SL_60                           = 8;
+    SL_70                           = 9;
+    SL_80                           = 10;
+    SL_90                           = 11;
+    SL_100                          = 12;
+    SL_110                          = 13;
+    SL_120                          = 14;
+    SL_130                          = 15;
+    SL_US_5                         = 16;
+    SL_US_10                        = 17;
+    SL_US_15                        = 18;
+    SL_US_20                        = 19;
+    SL_US_25                        = 20;
+    SL_US_30                        = 21;
+    SL_US_35                        = 22;
+    SL_US_40                        = 23;
+    SL_US_45                        = 24;
+    SL_US_50                        = 25;
+    SL_US_55                        = 26;
+    SL_US_60                        = 27;
+    SL_US_65                        = 28;
+    SL_US_70                        = 29;
+    SL_US_75                        = 30;
+    SL_US_80                        = 31;
+    SL_RESTRICTION_US_NO_LEFT       = 34;
+    SL_RESTRICTION_US_NO_RIGHT      = 35;
+    SL_RESTRICTION_US_NO_LEFT_UTURN = 36;
+    SL_RESTRICTION_US_NO_UTURN      = 37;
+    SL_RESTRICTION_US_NO_STRAIGHT   = 38;
+    TURN_RESTRICTION_US_LEFT        = 39;
+    TURN_RESTRICTION_US_RIGHT       = 40;
+    TURN_RESTRICTION_US_UTURN       = 41;
+    TURN_RESTRICTION_US_LEFT_UTURN  = 42;
+    SL_STOP_SIGN                    = 43;
+    REGULATORY_EU_LEFT              = 44;
+    REGULATORY_EU_RIGHT             = 45;
+    REGULATORY_EU_STRAIGHT          = 46;
+    REGULATORY_EU_STRAIGHT_LEFT     = 47;
+    REGULATORY_EU_STRAIGHT_RIGHT    = 48;
+    REGULATORY_EU_LEFT_RIGHT        = 49;
+    REGULATORY_EU_LEFT_NOW          = 50;
+    REGULATORY_EU_RIGHT_NOW         = 51;
+    NO_OVERTAKE_CAR                 = 52;
+    NO_OVERTAKE_TRUCK               = 53;
+    NO_ENTRY                        = 54;
+    NO_ENTRY_TRUCK                  = 55;
+    CANADA_REGULATORY_LEFT          = 56;
+    CANADA_REGULATORY_RIGHT         = 57;
+    CANADA_REGULATORY_STRAIGHT      = 58;
+    CANADA_REGULATORY_STRAIGHT_LEFT = 59;
+    CANADA_REGULATORY_STRAIGHT_RIGHT= 60;
+    CANADA_REGULATORY_LEFT_RIGHT    = 61;
+//TODO: Add panel detector info when completed
+}
+
+message Localization {
+    float distance     = 1;
+    float angle        = 2;
+}
+
+message Roi {
+    message Detection {
+        Mark type          = 1;
+        double confidence  = 2;
+    }
+
+    Mark type             = 1;
+    Rect rect             = 2;
+    bool manual           = 3;
+    string algorithm      = 4;
+    Detection detections  = 5;
+    Localization local    = 6;
+}
+
+message ImageRois {
+    string file = 1;
+    repeated Roi    rois = 2;
+}
+
+message Metadata {
+             string    stream     = 1;
+    repeated ImageRois image_rois = 2;
+}

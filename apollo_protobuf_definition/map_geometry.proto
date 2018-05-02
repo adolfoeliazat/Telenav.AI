@@ -1,0 +1,25 @@
+syntax = "proto3";
+message geometry
+{
+    message GPSCoordinate
+    {
+        float latitude                  = 1;
+        float longitude                 = 2;
+    }
+
+    message Link
+    {
+        uint32       type               = 1;
+        uint64       way_id             = 2;
+        uint64       from_node          = 3;
+        uint64       to_node            = 4;
+        repeated GPSCoordinate  geo     = 5;
+    }
+
+    message RegionGeometry
+    {
+        repeated Link links             = 1;
+    }
+
+    map<uint32, RegionGeometry> links_by_region = 1;
+}

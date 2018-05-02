@@ -1,0 +1,60 @@
+package orbb_app;
+
+// TODO: is this really needed?
+message Crop {
+    required uint32 x                 = 1 [ default = 0 ];
+    required uint32 y                 = 2 [ default = 0 ];
+    required uint32 width_percentage  = 3 [ default = 100 ];
+    required uint32 height_percentage = 4 [ default = 100 ];
+}
+
+message Algorithm {
+
+    // Subject to change.
+    enum Detector {
+        SPEED_LIMIT_US_SL        = 1;
+        SPEED_LIMIT_EU_SL        = 2;
+        LICENSE_PLATE_CV         = 3;
+        LICENSE_PLATE_ALPR       = 4;
+        FACES_HAAR_CV            = 5;
+        FACES_LBP_CV             = 6;
+        REGULATORY_CANADA_SL     = 7;
+        REGULATORY_SL            = 8;
+        SIGNPOSTS                = 9;
+    }
+
+    enum ImageReader {
+        CV = 1;      // Returns BGR cv::Mat
+        LIBJPEG = 2; // Returns YCrCb cv::Mat
+    }
+
+    // Some detectors work only with a specified ImageReader and a particular reason.
+    required Detector detector = 1;
+    optional Crop crop         = 2;
+
+    // If you don't know what you're doing don't provide this.
+    optional ImageReader image_reader = 3 [ default = CV ];
+}
+
+message Configuration {
+
+    enum Region {
+        EU = 1;
+        US = 2;
+    }
+
+    required string input_path     = 1 [default = "./images/"];
+    required string output_path    = 2 [default = "./images_out/"];
+
+    required string tessdata_path  = 3 [default = "../build/tessdata/"];
+    required string templates_path = 4 [default = "../build/data/templates/"];
+
+    required Region region         = 5 [default = EU];
+
+    optional bool marking          = 6 [default = false];
+    optional bool blur             = 7 [default = false];
+
+    repeated string datasets       = 8;
+
+    repeated Algorithm algorithms  = 9;
+}

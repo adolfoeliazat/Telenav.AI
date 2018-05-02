@@ -1,0 +1,47 @@
+package orbb;
+
+import "orbb_metadata.proto";
+import "orbb_definitions.proto";
+
+message RoiFromDB
+{
+    required Roi roi            = 1;
+    required int64 roi_id       = 2;
+    required int64 trip_id      = 3;
+    required GPSPair location   = 4;
+    optional int64 cluster_id   = 5;
+    optional string seq_index   = 6;
+    optional string platform    = 7; // eg. Samsung Galaxy 3, iPhone6SPlus
+}
+
+message LocalizedRoi
+{
+    required Mark type          = 1;
+    required GPSPair location   = 2;
+    required float facing       = 3;
+    repeated int64 used_roi_ids = 4;
+}
+
+message RoiSetDB {
+    repeated RoiFromDB roi_from_db = 1;
+}
+
+message ClusteredPoint
+{
+    required int64      cluster_id          = 1;
+    required GPSPair    location            = 2;
+    required float      facing              = 3;
+    required Mark       type                = 4;
+    required uint32     nb_points           = 5;
+    required float      confidence          = 6;
+    optional GPSPair    matched_location    = 7;
+    repeated uint32     roi_ids             = 8;
+    optional uint64     way_id              = 9;
+    optional uint64     from_node_id        = 10;
+    optional uint64     to_node_id          = 11;
+}
+
+message Clusters
+{
+    repeated ClusteredPoint cluster = 1;
+}

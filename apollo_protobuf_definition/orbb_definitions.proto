@@ -1,0 +1,592 @@
+package orbb;
+
+enum Region {
+    US = 1;
+    EU = 2;
+}
+
+//Use ISO2 country code for country specific signs
+enum Mark {
+    INVALID                                         = 32;
+            
+    FACE                                            = 1;
+    LICENSE_PLATE                                   = 2;
+            
+    SL_5                                            = 33; //Europe speed signs
+    SL_10                                           = 3;
+    SL_20                                           = 4;
+    SL_30                                           = 5;
+    SL_40                                           = 6;
+    SL_50                                           = 7;
+    SL_60                                           = 8;
+    SL_70                                           = 9;
+    SL_80                                           = 10;
+    SL_90                                           = 11;
+    SL_100                                          = 12;
+    SL_110                                          = 13;
+    SL_120                                          = 14;
+    SL_130                                          = 15;
+            
+    SPEED_LIMIT_5_US                                = 16; //US Speed Signs
+    SPEED_LIMIT_10_US                               = 17;
+    SPEED_LIMIT_15_US                               = 18;
+    SPEED_LIMIT_20_US                               = 19;
+    SPEED_LIMIT_25_US                               = 20;
+    SPEED_LIMIT_30_US                               = 21;
+    SPEED_LIMIT_35_US                               = 22;
+    SPEED_LIMIT_40_US                               = 23;
+    SPEED_LIMIT_45_US                               = 24;
+    SPEED_LIMIT_50_US                               = 25;
+    SPEED_LIMIT_55_US                               = 26;
+    SPEED_LIMIT_60_US                               = 27;
+    SPEED_LIMIT_65_US                               = 28;
+    SPEED_LIMIT_70_US                               = 29;
+    SPEED_LIMIT_75_US                               = 30;
+    SPEED_LIMIT_80_US                               = 31;
+            
+    PLACEHOLDER                                     = 34;
+            
+    TURN_RESTRICTION_STRAIGHT_RIGHT_US              = 35;
+    TURN_RESTRICTION_STRAIGHT_LEFT_US               = 36;
+    TURN_RESTRICTION_LEFT_RIGHT_US                  = 37;
+    TURN_RESTRICTION_STRAIGHT_THROUGH_US            = 38;
+    TURN_RESTRICTION_LEFT_US                        = 39;
+    TURN_RESTRICTION_RIGHT_US                       = 40;
+    TURN_RESTRICTION_U_TURN_US                      = 41;
+    TURN_RESTRICTION_U_TURN_LEFT_US                 = 42;
+            
+    STOP_US                                         = 43;
+            
+    REGULATORY_EU_LEFT                              = 44;
+    REGULATORY_EU_RIGHT                             = 45;
+    REGULATORY_EU_STRAIGHT                          = 46;
+    REGULATORY_EU_STRAIGHT_LEFT                     = 47;
+    REGULATORY_EU_STRAIGHT_RIGHT                    = 48;
+    REGULATORY_EU_LEFT_RIGHT                        = 49;
+    REGULATORY_EU_LEFT_NOW                          = 50;
+    REGULATORY_EU_RIGHT_NOW                         = 51;
+            
+    NO_OVERTAKE_CAR                                 = 52;
+    NO_OVERTAKE_TRUCK                               = 53;
+    EXCLUSION_DO_NOT_ENTER_US                       = 54; // aka NO ENTRY
+    EXCLUSION_NO_ENTRY_TRUCK_US                     = 55;
+            
+    CANADA_REGULATORY_LEFT                          = 56;
+    CANADA_REGULATORY_RIGHT                         = 57;
+    CANADA_REGULATORY_STRAIGHT                      = 58;
+    CANADA_REGULATORY_STRAIGHT_LEFT                 = 59;
+    CANADA_REGULATORY_STRAIGHT_RIGHT                = 60;
+    CANADA_REGULATORY_LEFT_RIGHT                    = 61;
+            
+    SIGNPOST_PULL_THROUGH                           = 62;
+    SIGNPOST_INTERCHANGE_LANE_DROPS                 = 63;
+    SIGNPOST_OVERHEAD_ARROW_PER_LANE                = 64;
+    SIGNPOST_DIAGRAMATIC_LANE                       = 65;
+    SIGNPOST_EXIT_GORE                              = 66;
+    SIGNPOST_GENERIC                                = 67;
+            
+    PLACEHOLDER3                                    = 68;
+        
+    YIELD_US                                        = 69;
+            
+    SL_MX_5                                         = 70; //Mexic speed signs eg. 5 km/h
+    SL_MX_10                                        = 71;
+    SL_MX_20                                        = 72;
+    SL_MX_30                                        = 73;
+    SL_MX_40                                        = 74;
+    SL_MX_50                                        = 75;
+    SL_MX_60                                        = 76;
+    SL_MX_70                                        = 77;
+    SL_MX_80                                        = 78;
+    SL_MX_90                                        = 79;
+    SL_MX_100                                       = 80;
+    SL_MX_110                                       = 81;
+    SL_MX_120                                       = 82;
+    SL_MX_130                                       = 83;
+            
+    SL_MX_STOP_SIGN                                 = 84; //ALTO
+    GIVE_WAY_MX                                     = 85; //CEDA EL PASO
+            
+    SL_CA_10                                        = 86; //Canada speed signs eg. 5 km/h
+    SL_CA_15                                        = 87;
+    SL_CA_20                                        = 88;
+    SL_CA_25                                        = 89;
+    SL_CA_50                                        = 90;
+    SL_CA_60                                        = 91;
+    SL_CA_70                                        = 92;
+    SL_CA_80                                        = 93;
+    SL_CA_90                                        = 94;
+    SL_CA_100                                       = 95;
+    SL_CA_110                                       = 96;
+    SL_CA_120                                       = 97;
+            
+    SL_CA_ONTARIO_10                                = 98; //Canada Ontario region speed signs
+    SL_CA_ONTARIO_20                                = 99;
+    SL_CA_ONTARIO_30                                = 100;
+    SL_CA_ONTARIO_40                                = 101;
+    SL_CA_ONTARIO_50                                = 102;
+    SL_CA_ONTARIO_60                                = 103;
+    SL_CA_ONTARIO_70                                = 104;
+    SL_CA_ONTARIO_80                                = 105;
+    SL_CA_ONTARIO_90                                = 106;
+    SL_CA_ONTARIO_100                               = 107;
+    SL_CA_ONTARIO_110                               = 108;
+    SL_CA_ONTARIO_120                               = 109;
+            
+    SL_CA_QUEBEC_10                                 = 110; //Canada Quebec region speed signs
+    SL_CA_QUEBEC_20                                 = 111;
+    SL_CA_QUEBEC_30                                 = 112;
+    SL_CA_QUEBEC_40                                 = 113;
+    SL_CA_QUEBEC_50                                 = 114;
+    SL_CA_QUEBEC_60                                 = 115;
+    SL_CA_QUEBEC_70                                 = 116;
+    SL_CA_QUEBEC_80                                 = 117;
+    SL_CA_QUEBEC_90                                 = 118;
+    SL_CA_QUEBEC_100                                = 119;
+    SL_CA_QUEBEC_110                                = 120;
+    SL_CA_QUEBEC_120                                = 121;
+            
+    STOP_CA                                         = 122; //ARRET stop sign
+            
+    TRAFFIC_LIGHTS_SIGN                             = 123;
+            
+    ONE_WAY_SMALL_RIGHT_US                          = 124;
+    ONE_WAY_SMALL_LEFT_US                           = 125;
+    ONE_WAY_LARGE_RIGHT_US                          = 126;
+    ONE_WAY_LARGE_LEFT_US                           = 127;
+    ONE_WAY_BEGIN_US                                = 128;
+    ONE_WAY_END_US                                  = 129;
+    ONE_WAY_DIVIDED_HIGHWAY_US                      = 130;
+            
+    LANE_MUST_EXIT_LEFT_US                          = 131;
+    PLACEHOLDER2                                    = 132;
+
+    TURN_LANE_U_TURN_US                             = 133;
+    TURN_LANES_NO_U_TURN_PLAQUE_US                  = 134;
+    TURN_LANE_LEFT_LANE_LEFT_US                     = 135;
+    TURN_LANE_RIGHT_LANE_RIGHT_US                   = 136;
+    TURN_LANE_HOV_PLAQUE_US                         = 137;
+    TURN_LANE_TAXI_PLAQUE_US                        = 138;
+    TURN_LANE_BUS_PLAQUE_US                         = 139;
+    TURN_LANE_LEFT_LANE_PLAQUE_US                   = 140;
+    TURN_LANE_CENTER_LANE_PLAQUE_US                 = 141;
+    TURN_LANE_RIGHT_LANE_PLAQUE_US                  = 142;
+    TURN_LANE_BEGIN_RIGHT_LANE_US                   = 143;
+    TURN_LANE_BEGIN_LEFT_LANE_US                    = 144;
+    
+    LANE_MUST_EXIT_RIGHT_US                         = 145;
+    LANE_MUST_ENTER_RAMP_LEFT_US                    = 146;
+    LANE_MUST_ENTER_FREEWAY_RIGHT_US                = 147;
+    LANE_MUST_ENTER_FREEWAY_LEFT_US                 = 148;
+    ALL_TRAFFIC_MUST_EXIT_US                        = 149;
+
+    MANDATORY_LEFT_CA                               = 150;
+    MANDATORY_RIGHT_CA                              = 151;
+    MANDATORY_UTURN_CA                              = 152;
+    MANDATORY_STRAIGHT_CA                           = 153;
+            
+    EXCLUSION_WRONG_WAY_US                          = 154;
+    EXCLUSION_NO_MOTOR_VEHICLES_US                  = 155;
+
+    EXCLUSION_ACTIVATED_DO_NOT_ENTER_US             = 156;
+    EXCLUSION_ACTIVATED_WRONG_WAY_US                = 157;
+
+    EXCLUSION_DO_NOT_ENTER_CA                       = 158; // aka NO ENTRY
+    EXCLUSION_NO_ENTRY_TRUCK_CA                     = 159;
+    
+    SPEED_LIMIT_TRUCKS_5_US                         = 160;
+    SPEED_LIMIT_TRUCKS_10_US                        = 161;
+    SPEED_LIMIT_TRUCKS_15_US                        = 162;
+    SPEED_LIMIT_TRUCKS_20_US                        = 163;
+    SPEED_LIMIT_TRUCKS_25_US                        = 164;
+    SPEED_LIMIT_TRUCKS_30_US                        = 165;
+    SPEED_LIMIT_TRUCKS_35_US                        = 166;
+    SPEED_LIMIT_TRUCKS_40_US                        = 167;
+    SPEED_LIMIT_TRUCKS_45_US                        = 168;
+    SPEED_LIMIT_TRUCKS_50_US                        = 169;
+    SPEED_LIMIT_TRUCKS_55_US                        = 170;
+    SPEED_LIMIT_TRUCKS_60_US                        = 171;
+    SPEED_LIMIT_TRUCKS_65_US                        = 172;
+    SPEED_LIMIT_TRUCKS_70_US                        = 173;
+    SPEED_LIMIT_TRUCKS_75_US                        = 174;
+    SPEED_LIMIT_TRUCKS_80_US                        = 175;
+        
+    SPEED_LIMIT_MINIMUM_5_US                        = 176;
+    SPEED_LIMIT_MINIMUM_10_US                       = 177;
+    SPEED_LIMIT_MINIMUM_15_US                       = 178;
+    SPEED_LIMIT_MINIMUM_20_US                       = 179;
+    SPEED_LIMIT_MINIMUM_25_US                       = 180;
+    SPEED_LIMIT_MINIMUM_30_US                       = 181;
+    SPEED_LIMIT_MINIMUM_35_US                       = 182;
+    SPEED_LIMIT_MINIMUM_40_US                       = 183;
+    SPEED_LIMIT_MINIMUM_45_US                       = 184;
+    SPEED_LIMIT_MINIMUM_50_US                       = 185;
+    SPEED_LIMIT_MINIMUM_55_US                       = 186;
+    SPEED_LIMIT_MINIMUM_60_US                       = 187;
+    SPEED_LIMIT_MINIMUM_65_US                       = 188;
+    SPEED_LIMIT_MINIMUM_70_US                       = 189;
+    SPEED_LIMIT_MINIMUM_75_US                       = 190;
+    SPEED_LIMIT_MINIMUM_80_US                       = 191;
+        
+    SPEED_LIMIT_NIGHT_5_US                          = 192;
+    SPEED_LIMIT_NIGHT_10_US                         = 193;
+    SPEED_LIMIT_NIGHT_15_US                         = 194;
+    SPEED_LIMIT_NIGHT_20_US                         = 195;
+    SPEED_LIMIT_NIGHT_25_US                         = 196;
+    SPEED_LIMIT_NIGHT_30_US                         = 197;
+    SPEED_LIMIT_NIGHT_35_US                         = 198;
+    SPEED_LIMIT_NIGHT_40_US                         = 199;
+    SPEED_LIMIT_NIGHT_45_US                         = 200;
+    SPEED_LIMIT_NIGHT_50_US                         = 201;
+    SPEED_LIMIT_NIGHT_55_US                         = 202;
+    SPEED_LIMIT_NIGHT_60_US                         = 203;
+    SPEED_LIMIT_NIGHT_65_US                         = 204;
+    SPEED_LIMIT_NIGHT_70_US                         = 205;
+    SPEED_LIMIT_NIGHT_75_US                         = 206;
+    SPEED_LIMIT_NIGHT_80_US                         = 207;
+       
+    SPEED_LIMIT_AHEAD_5_US                          = 208;
+    SPEED_LIMIT_AHEAD_10_US                         = 209;
+    SPEED_LIMIT_AHEAD_15_US                         = 210;
+    SPEED_LIMIT_AHEAD_20_US                         = 211;
+    SPEED_LIMIT_AHEAD_25_US                         = 212;
+    SPEED_LIMIT_AHEAD_30_US                         = 213;
+    SPEED_LIMIT_AHEAD_35_US                         = 214;
+    SPEED_LIMIT_AHEAD_40_US                         = 215;
+    SPEED_LIMIT_AHEAD_45_US                         = 216;
+    SPEED_LIMIT_AHEAD_50_US                         = 217;
+    SPEED_LIMIT_AHEAD_55_US                         = 218;
+    SPEED_LIMIT_AHEAD_60_US                         = 219;
+    SPEED_LIMIT_AHEAD_65_US                         = 220;
+    SPEED_LIMIT_AHEAD_70_US                         = 221;
+    SPEED_LIMIT_AHEAD_75_US                         = 222;
+    SPEED_LIMIT_AHEAD_80_US                         = 223;
+        
+    SPEED_LIMIT_SCHOOL_AHEAD_5_US                   = 224;
+    SPEED_LIMIT_SCHOOL_AHEAD_10_US                  = 225;
+    SPEED_LIMIT_SCHOOL_AHEAD_15_US                  = 226;
+    SPEED_LIMIT_SCHOOL_AHEAD_20_US                  = 227;
+    SPEED_LIMIT_SCHOOL_AHEAD_25_US                  = 228;
+    SPEED_LIMIT_SCHOOL_AHEAD_30_US                  = 229;
+    SPEED_LIMIT_SCHOOL_AHEAD_35_US                  = 230;
+    SPEED_LIMIT_SCHOOL_AHEAD_40_US                  = 231;
+    SPEED_LIMIT_SCHOOL_AHEAD_45_US                  = 232;
+    SPEED_LIMIT_SCHOOL_AHEAD_50_US                  = 233;
+    SPEED_LIMIT_SCHOOL_AHEAD_55_US                  = 234;
+    SPEED_LIMIT_SCHOOL_AHEAD_60_US                  = 235;
+    SPEED_LIMIT_SCHOOL_AHEAD_65_US                  = 236;
+    SPEED_LIMIT_SCHOOL_AHEAD_70_US                  = 237;
+    SPEED_LIMIT_SCHOOL_AHEAD_75_US                  = 238;
+    SPEED_LIMIT_SCHOOL_AHEAD_80_US                  = 239;
+    
+    SPEED_LIMIT_STATE_5_NY_US                       = 240;
+    SPEED_LIMIT_STATE_10_NY_US                      = 241;
+    SPEED_LIMIT_STATE_15_NY_US                      = 242;
+    SPEED_LIMIT_STATE_20_NY_US                      = 243;
+    SPEED_LIMIT_STATE_25_NY_US                      = 244;
+    SPEED_LIMIT_STATE_30_NY_US                      = 245;
+    SPEED_LIMIT_STATE_35_NY_US                      = 246;
+    SPEED_LIMIT_STATE_40_NY_US                      = 247;
+    SPEED_LIMIT_STATE_45_NY_US                      = 248;
+    SPEED_LIMIT_STATE_50_NY_US                      = 249;
+    SPEED_LIMIT_STATE_55_NY_US                      = 250;
+    SPEED_LIMIT_STATE_60_NY_US                      = 251;
+    SPEED_LIMIT_STATE_65_NY_US                      = 252;
+    SPEED_LIMIT_STATE_70_NY_US                      = 253;
+    SPEED_LIMIT_STATE_75_NY_US                      = 254;
+    SPEED_LIMIT_STATE_80_NY_US                      = 255;
+        
+    SPEED_LIMIT_AREA_5_NY_US                        = 256;
+    SPEED_LIMIT_AREA_10_NY_US                       = 257;
+    SPEED_LIMIT_AREA_15_NY_US                       = 258;
+    SPEED_LIMIT_AREA_20_NY_US                       = 259;
+    SPEED_LIMIT_AREA_25_NY_US                       = 260;
+    SPEED_LIMIT_AREA_30_NY_US                       = 261;
+    SPEED_LIMIT_AREA_35_NY_US                       = 262;
+    SPEED_LIMIT_AREA_40_NY_US                       = 263;
+    SPEED_LIMIT_AREA_45_NY_US                       = 264;
+    SPEED_LIMIT_AREA_50_NY_US                       = 265;
+    SPEED_LIMIT_AREA_55_NY_US                       = 266;
+    SPEED_LIMIT_AREA_60_NY_US                       = 267;
+    SPEED_LIMIT_AREA_65_NY_US                       = 268;
+    SPEED_LIMIT_AREA_70_NY_US                       = 269;
+    SPEED_LIMIT_AREA_75_NY_US                       = 270;
+    SPEED_LIMIT_AREA_80_NY_US                       = 271;
+        
+    SPEED_LIMIT_CITY_5_NY_US                        = 272;
+    SPEED_LIMIT_CITY_10_NY_US                       = 273;
+    SPEED_LIMIT_CITY_15_NY_US                       = 274;
+    SPEED_LIMIT_CITY_20_NY_US                       = 275;
+    SPEED_LIMIT_CITY_25_NY_US                       = 276;
+    SPEED_LIMIT_CITY_30_NY_US                       = 277;
+    SPEED_LIMIT_CITY_35_NY_US                       = 278;
+    SPEED_LIMIT_CITY_40_NY_US                       = 279;
+    SPEED_LIMIT_CITY_45_NY_US                       = 280;
+    SPEED_LIMIT_CITY_50_NY_US                       = 281;
+    SPEED_LIMIT_CITY_55_NY_US                       = 282;
+    SPEED_LIMIT_CITY_60_NY_US                       = 283;
+    SPEED_LIMIT_CITY_65_NY_US                       = 284;
+    SPEED_LIMIT_CITY_70_NY_US                       = 285;
+    SPEED_LIMIT_CITY_75_NY_US                       = 286;
+    SPEED_LIMIT_CITY_80_NY_US                       = 287;
+        
+    SPEED_LIMIT_VILLAGE_5_NY_US                     = 288;
+    SPEED_LIMIT_VILLAGE_10_NY_US                    = 289;
+    SPEED_LIMIT_VILLAGE_15_NY_US                    = 290;
+    SPEED_LIMIT_VILLAGE_20_NY_US                    = 291;
+    SPEED_LIMIT_VILLAGE_25_NY_US                    = 292;
+    SPEED_LIMIT_VILLAGE_30_NY_US                    = 293;
+    SPEED_LIMIT_VILLAGE_35_NY_US                    = 294;
+    SPEED_LIMIT_VILLAGE_40_NY_US                    = 295;
+    SPEED_LIMIT_VILLAGE_45_NY_US                    = 296;
+    SPEED_LIMIT_VILLAGE_50_NY_US                    = 297;
+    SPEED_LIMIT_VILLAGE_55_NY_US                    = 298;
+    SPEED_LIMIT_VILLAGE_60_NY_US                    = 299;
+    SPEED_LIMIT_VILLAGE_65_NY_US                    = 300;
+    SPEED_LIMIT_VILLAGE_70_NY_US                    = 301;
+    SPEED_LIMIT_VILLAGE_75_NY_US                    = 302;
+    SPEED_LIMIT_VILLAGE_80_NY_US                    = 303;
+        
+    SPEED_LIMIT_TOWN_5_NY_US                        = 304;
+    SPEED_LIMIT_TOWN_10_NY_US                       = 305;
+    SPEED_LIMIT_TOWN_15_NY_US                       = 306;
+    SPEED_LIMIT_TOWN_20_NY_US                       = 307;
+    SPEED_LIMIT_TOWN_25_NY_US                       = 308;
+    SPEED_LIMIT_TOWN_30_NY_US                       = 309;
+    SPEED_LIMIT_TOWN_35_NY_US                       = 310;
+    SPEED_LIMIT_TOWN_40_NY_US                       = 311;
+    SPEED_LIMIT_TOWN_45_NY_US                       = 312;
+    SPEED_LIMIT_TOWN_50_NY_US                       = 313;
+    SPEED_LIMIT_TOWN_55_NY_US                       = 314;
+    SPEED_LIMIT_TOWN_60_NY_US                       = 315;
+    SPEED_LIMIT_TOWN_65_NY_US                       = 316;
+    SPEED_LIMIT_TOWN_70_NY_US                       = 317;
+    SPEED_LIMIT_TOWN_75_NY_US                       = 318;
+    SPEED_LIMIT_TOWN_80_NY_US                       = 319;
+        
+    SPEED_LIMIT_BEGIN_5_US                          = 320;
+    SPEED_LIMIT_BEGIN_10_US                         = 321;
+    SPEED_LIMIT_BEGIN_15_US                         = 322;
+    SPEED_LIMIT_BEGIN_20_US                         = 323;
+    SPEED_LIMIT_BEGIN_25_US                         = 324;
+    SPEED_LIMIT_BEGIN_30_US                         = 325;
+    SPEED_LIMIT_BEGIN_35_US                         = 326;
+    SPEED_LIMIT_BEGIN_40_US                         = 327;
+    SPEED_LIMIT_BEGIN_45_US                         = 328;
+    SPEED_LIMIT_BEGIN_50_US                         = 329;
+    SPEED_LIMIT_BEGIN_55_US                         = 330;
+    SPEED_LIMIT_BEGIN_60_US                         = 331;
+    SPEED_LIMIT_BEGIN_65_US                         = 332;
+    SPEED_LIMIT_BEGIN_70_US                         = 333;
+    SPEED_LIMIT_BEGIN_75_US                         = 334;
+    SPEED_LIMIT_BEGIN_80_US                         = 335;
+
+    SPEED_LIMIT_END_5_US                            = 336;
+    SPEED_LIMIT_END_10_US                           = 337;
+    SPEED_LIMIT_END_15_US                           = 338;
+    SPEED_LIMIT_END_20_US                           = 339;
+    SPEED_LIMIT_END_25_US                           = 340;
+    SPEED_LIMIT_END_30_US                           = 341;
+    SPEED_LIMIT_END_35_US                           = 342;
+    SPEED_LIMIT_END_40_US                           = 343;
+    SPEED_LIMIT_END_45_US                           = 344;
+    SPEED_LIMIT_END_50_US                           = 345;
+    SPEED_LIMIT_END_55_US                           = 346;
+    SPEED_LIMIT_END_60_US                           = 347;
+    SPEED_LIMIT_END_65_US                           = 348;
+    SPEED_LIMIT_END_70_US                           = 349;
+    SPEED_LIMIT_END_75_US                           = 350;
+    SPEED_LIMIT_END_80_US                           = 351;
+    
+    SPEED_LIMIT_ZONE_AHEAD_5_US                     = 352;
+    SPEED_LIMIT_ZONE_AHEAD_10_US                    = 353;
+    SPEED_LIMIT_ZONE_AHEAD_15_US                    = 354;
+    SPEED_LIMIT_ZONE_AHEAD_20_US                    = 355;
+    SPEED_LIMIT_ZONE_AHEAD_25_US                    = 356;
+    SPEED_LIMIT_ZONE_AHEAD_30_US                    = 357;
+    SPEED_LIMIT_ZONE_AHEAD_35_US                    = 358;
+    SPEED_LIMIT_ZONE_AHEAD_40_US                    = 359;
+    SPEED_LIMIT_ZONE_AHEAD_45_US                    = 360;
+    SPEED_LIMIT_ZONE_AHEAD_50_US                    = 361;
+    SPEED_LIMIT_ZONE_AHEAD_55_US                    = 362;
+    SPEED_LIMIT_ZONE_AHEAD_60_US                    = 363;
+    SPEED_LIMIT_ZONE_AHEAD_65_US                    = 364;
+    SPEED_LIMIT_ZONE_AHEAD_70_US                    = 365;
+    SPEED_LIMIT_ZONE_AHEAD_75_US                    = 366;
+    SPEED_LIMIT_ZONE_AHEAD_80_US                    = 367;    
+        
+    SL_US_CITYWIDE                                  = 368;
+    SL_US_NEIGHBORHOOD                              = 369;
+    SL_US_RESIDENTIAL                               = 370;
+    SL_US_UNLESS_OTHERWISE_POSTED                   = 371;
+    SL_US_SCHOOL                                    = 372;
+    SL_US_WHEN_FLASHING                             = 373;
+    SL_US_MON_FRI                                   = 374;
+    SL_US_HOUR_INTERVAL                             = 375;
+        
+    TURN_RESTRICTION_NO_TURNS_GROUND_US             = 376;
+    TURN_RESTRICTION_NO_TURNS_SUSPENDED_US          = 377;
+
+    TURN_RESTRICTION_ACTIVATED_RIGHT_US             = 378;
+    TURN_RESTRICTION_ACTIVATED_LEFT_US              = 379;
+    TURN_RESTRICTION_ACTIVATED_NO_U_TURN_US         = 380;
+    TURN_RESTRICTION_ACTIVATED_U_TURN_LEFT_US       = 381;
+    TURN_RESTRICTION_ACTIVATED_STRAIGHT_US          = 382;
+
+    TURN_RESTRICTION_RIGHT_TEXT_US                  = 383;
+    TURN_RESTRICTION_LEFT_TEXT_US                   = 384;
+
+    TURN_RESTRICTION_STRAIGHT_RIGHT_CA              = 385;
+    TURN_RESTRICTION_STRAIGHT_LEFT_CA               = 386;
+    TURN_RESTRICTION_LEFT_RIGHT_CA                  = 387;
+    TURN_RESTRICTION_STRAIGHT_THROUGH_CA            = 388;
+    TURN_RESTRICTION_LEFT_CA                        = 389;
+    TURN_RESTRICTION_RIGHT_CA                       = 390;
+    TURN_RESTRICTION_U_TURN_CA                      = 391;
+    TURN_RESTRICTION_U_TURN_LEFT_CA                 = 392;
+        
+    STOP_ALL_WAY_US                                 = 393;
+    STOP_TO_ONCOMING_TRAFFIC_US                     = 394;
+    STOP_EXCEPT_RIGHT_TURN_US                       = 395;
+    
+    ROAD_CLOSED_US                                  = 396;
+    ROAD_CLOSED_XX_MILES_LOCAL_ONLY_US              = 397;
+    ROAD_CLOSED_BRIDGE_XX_MILES_LOCAL_ONLY_US       = 398;
+    ROAD_CLOSED_THRU_TRAFFIC_US                     = 399;
+
+    NO_TURN_RED_SYMBOL_US                           = 400;
+    NO_TURN_RED_US                                  = 401;
+    NO_TURN_RED_VARIANT_US                          = 402;
+
+    SL_US_RADAR_ENFORCED                            = 403;
+    SL_US_WORKSITE                                  = 404;
+    TIME_INTERVAL_PLAQUE_US                         = 405;
+
+    TURN_LANE_LEFT_US                               = 406;
+    TURN_LANE_LEFT_STRAIGHT_US                      = 407;
+    TURN_LANE_STRAIGHT_US                           = 408;
+    TURN_LANE_RIGHT_US                              = 409;
+    TURN_LANE_RIGHT_STRAIGHT_US                     = 410;
+    TURN_LANE_LEFT_RIGHT_US                         = 411;
+    TURN_LANE_LEFT_STRAIGHT_RIGHT_US                = 412;
+    TURN_LANE_THRU_TRAFFIC_LEFT_US                  = 413;
+    TURN_LANE_THRU_TRAFFIC_CENTER_US                = 414;
+    TURN_LANE_THRU_TRAFFIC_RIGHT_US                 = 415;
+    TURN_LANE_LEFT_U_TURN_US                        = 416;
+    TURN_LANE_LEFT_U_TURN_LEFT_US                   = 417;
+    TURN_LANE_LEFT_LEFT_US                          = 418;
+    TURN_LANE_LEFT_LEFT_STRAIGHT_US                 = 419;
+
+    TWO_WAY_LEFT_TURN_US                            = 420;
+
+    REVERSIBLE_CENTER_LANE_NO_ENTRY_US              = 421;
+    REVERSIBLE_CENTER_LANE_LEFT_STRAIGHT_US         = 422;
+    REVERSIBLE_CENTER_LANE_REVERSIBLE_US            = 423;
+    REVERSIBLE_CENTER_LANE_US                       = 424;
+    REVERSIBLE_END_LANE_US                          = 425;
+    REVERSIBLE_BEGIN_LANE_US                        = 426;
+    REVERSIBLE_END_LANE_LEFT_ONLY_US                = 427;
+
+    JUGHEAD_ALL_TURNS_RIGHT_LANE_US                 = 428;
+    JUGHEAD_UTURN_FROM_RIGHT_LANE_US                = 429;
+    JUGHEAD_ALL_TURNS_EXIT_US                       = 430;
+    JUGHEAD_UTURN_EXIT_US                           = 431;
+    JUGHEAD_UTURN_LEFT_EXIT_US                      = 432;
+    JUGHEAD_ALL_TURNS_INTER_US                      = 433;
+    JUGHEAD_UTURN_INTER_US                          = 434;
+    JUGHEAD_UTURN_LEFT_INTERSECTION_US              = 435;
+    JUGHEAD_UTURN_DOWN_US                           = 436;
+    JUGHEAD_UTURN_LEFT_DOWN_US                      = 437;
+
+    ROUNDABOUT_DIRECTIONAL_SMALL_US                 = 438;
+    ROUNDABOUT_DIRECTIONAL_MEDIUM_US                = 439;
+    ROUNDABOUT_DIRECTIONAL_LARGE_US                 = 440;
+    ROUNDABOUT_CIRCULATION_US                       = 441;
+
+    YIELD_CA                                        = 442;
+    TRAFFIC_LIGHTS_SIGN_CA                          = 443;
+
+    SL_CA_5                                         = 444;
+    SL_CA_30                                        = 445;
+    SL_CA_35                                        = 446;
+    SL_CA_40                                        = 447;
+    SL_CA_45                                        = 448;
+    SL_CA_55                                        = 449;
+    SL_CA_65                                        = 450;
+    SL_CA_75                                        = 451;
+
+    TURN_RESTRICTION_U_TURN_TEXT_US                 = 452;
+    BEGIN_TWO_WAY_TRAFFIC_US                        = 453;
+}
+
+enum SignElement {
+    INVALID_ELEMENT                                 = 0;
+
+    ROUTE_SIGN                                      = 1;
+
+    AUX_DIRECTION_EAST                              = 2;
+    AUX_DIRECTION_WEST                              = 3;
+    AUX_DIRECTION_SOUTH                             = 4;
+    AUX_DIRECTION_NORTH                             = 5;
+
+    ARROW_DOWN                                      = 6;
+    ARROW_AHEAD_RIGHT                               = 8;
+    ARROW_AHEAD_LEFT                                = 9;
+    ARROW_RIGHT                                     = 10;
+    ARROW_LEFT                                      = 11;
+    ARROW_STRAIGHT                                  = 12;
+    ARROW_STRAIGHT_RIGHT                            = 13;
+    ARROW_STRAIGHT_LEFT                             = 14;
+    ARROW_CURVED_RIGHT                              = 15;
+    ARROW_CURVED_LEFT                               = 16;
+    ARROW_DIVERGENT_STRAIGHT_RIGHT                  = 17;
+    ARROW_DIVERGENT_STRAIGHT_LEFT                   = 18;
+
+    DISTANCE                                        = 19;
+    UNIT_MEASUREMENT                                = 20;
+    DESTINATION                                     = 21;
+
+    EXIT_SIGN_ONE_LANE_STRAIGHT                     = 22;
+    EXIT_SIGN_EXIT                                  = 24;
+    EXIT_SIGN_ONLY                                  = 25;
+    EXIT_SIGN_EXIT_ONLY                             = 26;
+    EXIT_SIGN_ONE_LANE_RIGHT                        = 27;
+    EXIT_SIGN_TWO_LANES_RIGHT                       = 28;
+    EXIT_SIGN_TWO_LANES_STRAIGHT                    = 29;
+    EXIT_SIGN_LEFT                                  = 30;
+
+    EXIT_DIRECTION_ADVISORY_SPEED_XX_MPH            = 31;
+    EXIT_DIRECTION_ADVISORY_SPEED_TWO_LANES_XX_MPH  = 32;
+    EXIT_DIRECTION_ADVISORY_SPEED_EXIT_XX_MPH       = 33;
+    EXIT_DIRECTION_ADVISORY_SPEED_RAMP_XX_MPH       = 34;
+
+    EXIT_NUMBER_XX_PLAQUE                           = 35;
+    EXIT_TEXT                                       = 36;
+    EXIT_XX_TEXT                                    = 37;
+
+    ARROW_SPLIT                                     = 38;
+
+    GENERIC_TEXT                                    = 39;
+    GENERIC_SHAPE                                   = 40;
+
+    ROAD_SIGN_INTERSTATE                            = 41;
+    ROAD_SIGN_BUSINESS                              = 42;
+    ROAD_SIGN_US                                    = 43;
+    ROAD_SIGN_STATE                                 = 44;
+    ROAD_SIGN_COUNTRY                               = 45;
+    ROAD_SIGN_FOREST                                = 46;
+}
+
+message Point {
+    required uint32 row = 1;
+    required uint32 col = 2;
+}
+
+message Rect {
+    required Point tl = 1;
+    required Point br = 2;
+}
+
+message Polygon {
+    repeated Point points = 1;
+}

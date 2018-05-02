@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package df_package;
+
+message PredictionClass {
+	string name 		= 1;
+	double confidence 	= 2;
+}
+
+message Prediction {
+    string file 							= 1;
+    repeated PredictionClass pred_classes 	= 2;
+}
+
+message DFMetadata {
+    string stream     				= 1;
+    repeated Prediction predictions = 2;
+}
+
+message DetectionRequest {
+    string images_path = 1;
+}
+
+message TypedDFMetadata {
+    string type     				= 1;
+    DFMetadata dfMetadata = 2;
+}
+
+message RepeatedTypedDFMetadata {
+    repeated TypedDFMetadata typedDFMetadatas = 1;
+}

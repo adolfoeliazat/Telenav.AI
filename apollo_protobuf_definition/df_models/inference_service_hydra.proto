@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package df_package;
+
+import "df_definitions.proto";
+
+service InferenceService {
+    rpc process (DetectionRequest) returns (RepeatedTypedDFMetadata) {}
+}

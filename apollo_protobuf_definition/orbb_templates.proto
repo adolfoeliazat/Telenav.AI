@@ -1,0 +1,90 @@
+package orbb;
+
+import "orbb_internal_definitions.proto";
+import "orbb_definitions.proto";
+
+message IntPair {
+    required uint32 first = 1;
+    required uint32 second = 2;
+}
+
+message EdgePixelsVec {
+    repeated IntPair int_pairs = 1;
+}
+
+message EdgePixelsVecPair {
+    required EdgePixelsVec first = 1;
+    required EdgePixelsVec second = 2;
+}
+
+message SignEdgesPair {
+    required enSignType sign_type = 1;
+    required EdgePixelsVecPair edge_pair= 2;
+}
+
+message MapSignEdges {
+    repeated SignEdgesPair entries = 1;
+}
+
+message InnerContoursVec {
+    repeated InnerContour entries = 1;
+}
+
+message PointsVector {
+    repeated Point entries = 1;
+}
+
+message InnerContour {
+    required PointsVector contour = 1;
+    required InnerContoursVec children_contours = 2;
+
+    required MapSignEdges edges_map = 3;
+
+    required Rect bounding_rect = 4;
+    required Rect parent_rect = 5;
+    required enSignType sign_type = 6;
+    
+    required Point2f top_left_to_parent_ratio = 7;
+    required Point2f bottom_right_to_parent_ratio = 8;
+    required double contour_area = 9;
+    required double bounding_rect_ratio = 10;
+    required double contour_area_to_parent_shape_ratio = 11;
+    required int32 idx = 12;
+    required bool convexity_fixed = 13;
+}
+
+message SignFamilyTemplatePair {
+    required enSignType first = 1;
+    required InnerContoursVec second = 2;
+}
+
+message ElementFamilyTemplatePair {
+    required enSignElementType first = 1;
+    required InnerContoursVec second = 2;
+}
+
+// All the templates from one family, eg. Speed Limit
+message SignFamilyTemplatesMap {
+    repeated SignFamilyTemplatePair entries = 1;
+}
+
+// All the templates from one element family, eg. Arrows
+message ElementFamilyTemplatesMap {
+    repeated ElementFamilyTemplatePair entries = 1;
+}
+
+message AllSignTemplatePair {
+    required enSignType first = 1;
+    required SignFamilyTemplatesMap second = 2;
+}
+
+message AllElementTemplatePair {
+    required enSignElementType first = 1;
+    required ElementFamilyTemplatesMap second = 2;
+}
+
+// All the family templates used for init
+message AllTemplateMap {
+    repeated AllSignTemplatePair sign_entries = 1;
+    repeated AllElementTemplatePair element_entries = 2;
+}

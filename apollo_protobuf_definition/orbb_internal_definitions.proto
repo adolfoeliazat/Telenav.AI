@@ -1,0 +1,171 @@
+package orbb;
+
+message Point2f {
+    required float x = 1;
+    required float y = 2;
+}
+
+enum enSignType
+{
+    eUndefinedSign = 0x0000;
+
+    eStopSign = 0x0021;
+    eGiveWay = 0x0022;
+    eHwSign = 0x0024;
+    eNoOvertakeCar = 0x0025;
+    eNoOvertakeTruck = 0x0026;
+    eNoEntry = 0x0027;
+    eNoEntryTruck = 0x0028;
+
+    eSpeedLimit = 0x0040;
+    eSpeedLimit5 = 0x0041;
+    eSpeedLimit10 = 0x0042;
+    eSpeedLimit20 = 0x0043;
+    eSpeedLimit30 = 0x0044;
+    eSpeedLimit40 = 0x0045;
+    eSpeedLimit50 = 0x0046;
+    eSpeedLimit60 = 0x0047;
+    eSpeedLimit70 = 0x0048;
+    eSpeedLimit80 = 0x0049;
+    eSpeedLimit90 = 0x004A;
+    eSpeedLimit100 = 0x004B;
+    eSpeedLimit110 = 0x004C;
+    eSpeedLimit120 = 0x004D;
+    eSpeedLimit130 = 0x004E;
+    eSpeedLimitLast = 0x004F;
+
+    eSpeedLimitUSConstruction = 0x0080;
+    eSpeedLimitUSConstruction25 = 0x0081;
+    eSpeedLimitUSConstruction35 = 0x0082;
+    eSpeedLimitUSConstruction40 = 0x0083;
+    eSpeedLimitUSConstructionLast = 0x0084;
+
+    eSpeedLimitUS = 0x0100;
+    eSpeedLimit5US = 0x0101;
+    eSpeedLimit10US = 0x0102;
+    eSpeedLimit15US = 0x0103;
+    eSpeedLimit20US = 0x0104;
+    eSpeedLimit25US = 0x0105;
+    eSpeedLimit30US = 0x0106;
+    eSpeedLimit35US = 0x0107;
+    eSpeedLimit40US = 0x0108;
+    eSpeedLimit45US = 0x0109;
+    eSpeedLimit50US = 0x010A;
+    eSpeedLimit55US = 0x010B;
+    eSpeedLimit60US = 0x010C;
+    eSpeedLimit65US = 0x010D;
+    eSpeedLimit70US = 0x010E;
+    eSpeedLimit75US = 0x010F;
+    eSpeedLimit80US = 0x0110;
+    eSpeedLimitUSLast = 0x0111;
+
+    eRegulatorySign = 0x200;
+    eRegLeft = 0x0201;
+    eRegLeftNow = 0x0202;
+    eRegRight = 0x0203;
+    eRegRightNow = 0x0204;
+    eRegLeftRight = 0x0205;
+    eRegStraight = 0x0206;
+    eRegStraightLeft = 0x0207;
+    eRegStraightRight = 0x0208;
+    eRegLast = 0x0209;
+
+    eTurnRestriction = 0x0400;
+    eTurnRestrictionLeft = 0x0401;
+    eTurnRestrictionRight = 0x0402;
+    eTurnRestrictionUTurn = 0x0403;
+    eTurnRestrictionLeftUTurn = 0x0404;
+    eTurnRestrictionStraight = 0x0405;
+    eTurnRestrictionLeftRight = 0x0406;
+    eTurnRestrictionStraightLeft = 0x0407;
+    eTurnRestrictionStraightRight = 0x0408;
+    eTurnRestrictionLast = 0x0409;
+
+    eCanadaRegulatory = 0x800;
+    eCanadaRegulatoryStraight = 0x0801;
+    eCanadaRegulatoryLeft = 0x0802;
+    eCanadaRegulatoryRight = 0x0803;
+    eCanadaRegulatoryLeftRight = 0x0804;
+    eCanadaRegulatoryStraightLeft = 0x0805;
+    eCanadaRegulatoryStraightRight = 0x0806;
+    eCanadaRegulatoryLast = 0x0807;
+
+    eSignpost = 0x1000;
+    eSignpostPullThrough = 0x1001;
+    eSignpostInterchangeLaneDrops = 0x1002;
+    eSignpostOverheadArrowPerLane = 0x1003;
+    eSignpostDiagramaticLane = 0x1004;
+    eSignpostExitGore = 0x1005;
+    eSignpostLast = 0x1006;
+}
+
+enum enSignElementType
+{
+    eUndefinedElement = 0x0000;
+
+    eRouteSign = 0x0020;
+    eRouteSignInterstate = 0x0021;
+    eRouteSignBusiness = 0x0022;
+    eRouteSignUS = 0x0023;
+    eRouteSignMichigan = 0x0024;
+    eRouteSignCounty = 0x0025;
+    eRouteSignForest = 0x0026;
+    eRouteSignLast = 0x0027;
+
+    eRoadSignAuxiliary = 0x0040;
+    eRoadSignAuxiliaryDirectionEast = 0x0041;
+    eRoadSignAuxiliaryDirectionWest = 0x0042;
+    eRoadSignAuxiliaryDirectionNorth = 0x0043;
+    eRoadSignAuxiliaryDirectionSouth = 0x0044;
+    eRoadSignAuxiliaryLast = 0x0045;
+
+    eDestination = 0x0080;
+
+    eArrow = 0x0100;
+    eArrowDown = 0x0101;
+    eArrowAheadRightA = 0x0102;
+    eArrowAheadRightB = 0x0103;
+    eArrowAheadLeftA = 0x0104;
+    eArrowAheadLeftB = 0x0105;
+    eArrowLeft = 0x0106;
+    eArrowRight = 0x0107;
+    eArrowSplit = 0x0108;
+    eArrowStraightA = 0x0109;
+    eArrowStraightB = 0x010A;
+    eArrowStraightRight = 0x010B;
+    eArrowStraightLeft = 0x010C;
+    eArrowCurvedRight = 0x010D;
+    eArrowCurvedLeft = 0x010E;
+    eArrowDivergentStraightRight = 0x010F;
+    eArrowDivergentStraightLeft = 0x0110;
+    eArrowLast = 0x0111;
+
+    eDistance = 0x0200;
+
+    eUnitOfMeasurement = 0x0400;
+
+    eExitSignPanel = 0x0800;
+    eExitSignPanelOneLaneStraight = 0x0801;
+    eExitSignPanelExit = 0x0802;
+    eExitSignPanelOnly = 0x0803;
+    eExitSignPanelExitOnly = 0x0804;
+    eExitSignPanelOneLaneRight = 0x0805;
+    eExitSignPanelTwoLanesRight = 0x0806;
+    eExitSignPanelTwoLanesStraight = 0x0807;
+    eExitSignPanelLeft = 0x0808;
+    eExitSignPanelLast = 0x0809;
+
+    eExitDirectionAdvisorySpeed = 0x1000;
+    eExitDirectionAdvisorySpeedXXMph = 0x1001;
+    eExitDirectionAdvisorySpeedTwoLanesXXMph = 0x1002;
+    eExitDirectionAdvisorySpeedExitXXMph = 0x1003;
+    eExitDirectionAdvisorySpeedRampXXMph = 0x1004;
+    eExitDirectionAdvisorySpeedLast = 0x1005;
+
+    eExitPlaque = 0x2000;
+    eExitPlaqueNumber = 0x2001;
+    eExitPlaqueText = 0x2002;
+    eExitPlaqueNumberText = 0x2003;
+    eExitPlaqueLast = 0x2004;
+}
+
