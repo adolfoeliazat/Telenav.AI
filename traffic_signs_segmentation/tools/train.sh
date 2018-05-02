@@ -49,7 +49,7 @@ python3 $UTILS/edit_caffe_solver.py -o $SEGMENTATION_SOLVER_PATH -t $SEGMENTATIO
 $CAFFE_TOOLS/caffe train \
     -gpu $CUDA_VISIBLE_DEVICES \
     -solver $SEGMENTATION_SOLVER_PATH \
-    -weights $CAFFE_NETS_PATH/fcn8s-heavy-pascal.caffemodel.caffemodel 2>&1 | tee -a $MODEL_OUT_PATH/segmentation_model.log
+    -weights $CAFFE_NETS_PATH/fcn8s-heavy-pascal.caffemodel 2>&1 | tee -a $MODEL_OUT_PATH/segmentation_model.log
 
 #Train classification model
 $CAFFE_TOOLS/caffe train \
