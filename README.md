@@ -19,4 +19,4 @@ datasets provided. Moreover, you can train them on your own datasets if you brin
 
 In order to see more details, check out [RetinaNet](https://github.com/Telenav/Telenav.AI/tree/master/retinanet) for instructions regarding our RetinaNet implementation or [Segmentation](https://github.com/Telenav/Telenav.AI/tree/master/traffic_signs_segmentation) for the Segmentation based one.
 
-Also, see this notebook LINK WHEN READY for a quick demo on how you can use and visualize our data. 
+Also, see this [notebook](https://github.com/Telenav/Telenav.AI/tree/master/apollo_python_common/demo) for a quick demo on how you can use and visualize our data. 
