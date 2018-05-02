@@ -73,7 +73,7 @@ ENV PATH $CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$PATH
 RUN echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
 
 # Install pip dependencies
-RUN pip3 install --upgrade pip && \
+RUN pip3 install pip==9.0.3 && \
     pip3 install appdirs==1.4.0 && \
     pip3 install cycler==0.10.0 && \
     pip3 install dask==0.13.0 && \
