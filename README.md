@@ -17,6 +17,6 @@ A smaller version of the dataset, containing only 1000 images, can be found here
 This repository contains all the necessary resources to train our neural networks on the 
 datasets provided. Moreover, you can train them on your own datasets if you bring them to the required protobuf format.
 
-In order to see more details, check out [RetinaNet](https://github.com/Telenav/Telenav.AI/tree/master/retinanet) for instructions regarding the our RetinaNet implementation or [Segmentation](https://github.com/Telenav/Telenav.AI/tree/master/traffic_signs_segmentation) for the Segmentation based one.
+In order to see more details, check out [RetinaNet](https://github.com/Telenav/Telenav.AI/tree/master/retinanet) for instructions regarding our RetinaNet implementation or [Segmentation](https://github.com/Telenav/Telenav.AI/tree/master/traffic_signs_segmentation) for the Segmentation based one.
 
 Also, see this notebook LINK WHEN READY for a quick demo on how you can use and visualize our data. 
