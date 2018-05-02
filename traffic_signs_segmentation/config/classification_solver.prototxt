@@ -1,0 +1,13 @@
+test_iter: 4
+test_interval: 1
+base_lr: 9.99999905104687e-09
+display: 40
+max_iter: 300
+lr_policy: "fixed"
+momentum: 0.8999999761581421
+weight_decay: 9.999999960041972e-12
+snapshot: 5
+snapshot_prefix: "/data/caffe_model//classification"
+solver_mode: GPU
+net: "./config//classification_train_val.prototxt"
+solver_type: ADAM

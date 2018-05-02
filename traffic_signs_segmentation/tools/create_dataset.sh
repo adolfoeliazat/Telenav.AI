@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # You need to set this up first.
 # path to the rois.bin file 
-ROI_PATH=/data/rois.bin
+ROI_PATH=/data/input_data/rois.bin
 # output model dir
 MODEL_OUT_PATH=/data/caffe_model/
 # path to caffe tools folder
