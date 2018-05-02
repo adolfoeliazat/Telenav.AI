@@ -33,17 +33,18 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
  - *{HOST_PATH_TO_DATA}* is the train dataset path: _{ARTIFACTS_PATH}/train_data_
  -  Run ***Telenav.AI/docker\_build\_image\_traffic\_signs\_segmentation_train.sh***
  -  Run ***sudo nvidia-docker run --name traffic\_signs\_segmentation --net=host --rm -ti 
-  -v {Root}:Telenav.AI -v {HOST_PATH_TO_DATA}:data/input_data telenav/traffic\_signs\_segmentation_train***  
+  -v {Root}:/home/Telenav.AI -v {HOST_PATH_TO_DATA}:/data/input_data telenav/traffic\_signs\_segmentation_train***  
 
 2.2 Create dataset
   
- - Inside the docker container go to ***/home/Telenav.AI*** 
- - Run ***Telenav.AI/traffic_signs_segmentation/tools/create_dataset.sh***
+ - Inside the docker container go to ***/home/Telenav.AI/traffic_signs_segmentation/tools/*** 
+ - Run ***create_dataset.sh***
  - This will create the lmdb files needed for training in */data/caffe_model/*
 
 2.3 Train
-
- - Run ***Telenav.AI/traffic_signs_segmentation/tools/train.sh***
+ 
+ - Inside the docker container go to ***/home/Telenav.AI/traffic_signs_segmentation/tools/*** 
+ - Run ***train.sh***
  - Training may very depending on the train dataset size, around 1 week for 30 epochs and 20k images. Intermediary models are saved in */data/caffe_model/*
  
 ## 3. Test and evaluate
@@ -59,6 +60,6 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
  
  - Edit *Telenav.AI/traffic_signs_segmentation/tools/evaluate.sh*:
 	 * For **TEST_ROI** parameter: set the path to the file containing ground truth ROIs for traffic signs in the test or validation dataset (e.g. /data/train_data/rois.bin).
-	 * For **PREDICT_ROI** parameter: set the path to the file containing serialized detections in protobuf format generated at step 2.4 in **OUTPUT_PATH** folder
+	 * For **PREDICT_ROI** parameter: set the path to the file containing serialized detections in protobuf format generated at step 2.3 in **OUTPUT_PATH** folder
 	 * **RESULT_FILE** parameter indicates the text file where evaluations metrics will be saved.
  - Run ***Telenav.AI/traffic_signs_segmentation/tools/evaluate.sh***
