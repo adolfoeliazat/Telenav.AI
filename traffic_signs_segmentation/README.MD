@@ -30,10 +30,9 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
 
 2.1 Create a docker container with Caffe
 
- - *{HOST_PATH_TO_DATA}* is the train dataset path: _{ARTIFACTS_PATH}/train_data_
  -  Run ***Telenav.AI/docker\_build\_image\_traffic\_signs\_segmentation_train.sh***
  -  Run ***sudo nvidia-docker run --name traffic\_signs\_segmentation --net=host --rm -ti 
-  -v {Root}:/home/Telenav.AI -v {HOST_PATH_TO_DATA}:/data/input_data telenav/traffic\_signs\_segmentation_train***  
+  -v {Root}:/home/Telenav.AI -v {ARTIFACTS_PATH}/train_data:/data/input_data -v {ARTIFACTS_PATH}/test_data:/data/test_data telenav/traffic\_signs\_segmentation_train***  
 
 2.2 Create dataset
   
@@ -59,7 +58,7 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
  3.2 Evaluate
  
  - Edit *Telenav.AI/traffic_signs_segmentation/tools/evaluate.sh*:
-	 * For **TEST_ROI** parameter: set the path to the file containing ground truth ROIs for traffic signs in the test or validation dataset (e.g. /data/train_data/rois.bin).
+	 * For **TEST_ROI** parameter: set the path to the file containing ground truth ROIs for traffic signs in the test or validation dataset (e.g. /data/test_data/rois.bin).
 	 * For **PREDICT_ROI** parameter: set the path to the file containing serialized detections in protobuf format generated at step 2.3 in **OUTPUT_PATH** folder
 	 * **RESULT_FILE** parameter indicates the text file where evaluations metrics will be saved.
  - Run ***Telenav.AI/traffic_signs_segmentation/tools/evaluate.sh***
