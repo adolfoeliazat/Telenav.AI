@@ -84,7 +84,7 @@ def _read_annotations(csv_reader, classes):
 
         # check if the current class name is correctly present
         if class_name not in classes:
-            raise ValueError('line {}: unknown class name: {}'.format(line, class_name))
+            raise ValueError('line {}: unknown class name: \'{}\' (classes: {})'.format(line, class_name, classes))
 
         result[img_file].append({'x1': x1, 'x2': x2, 'y1': y1, 'y2': y2, 'class': class_name})
     return result
@@ -108,7 +108,6 @@ class CSVGenerator(Generator):
         self,
         csv_data_file,
         csv_class_file,
-        image_data_generator,
         base_dir=None,
         **kwargs
     ):
@@ -139,7 +138,7 @@ class CSVGenerator(Generator):
             raise_from(ValueError('invalid CSV annotations file: {}: {}'.format(csv_data_file, e)), None)
         self.image_names = list(self.image_data.keys())
 
-        super(CSVGenerator, self).__init__(image_data_generator, **kwargs)
+        super(CSVGenerator, self).__init__(**kwargs)
 
     def size(self):
         return len(self.image_names)

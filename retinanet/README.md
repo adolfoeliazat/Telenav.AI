@@ -6,8 +6,8 @@ This code was tested with:
 
 - CUDA_VERSION 9.0.176  (required to be installed on the machine)
 - CUDNN_VERSION 7.0.5.15 (required to be installed on the machine)
-- Tensorflow 1.6  
-- Keras 2.1.3  
+- Tensorflow 1.7  
+- Keras 2.1.5  
 - Ubuntu 16.04.4
 
 
@@ -34,9 +34,9 @@ We assume that everything that is going to run, will run from a docker container
 **C. Training** 
 
 1. Edit _train.sh_ script located in the current folder of the running docker container: `nano train.sh`  
-    * For _WEIGHTS_ parameter:  
-        * Use the value as 'imagenet' when you want to start a train from scratch.  
-        * When one wants to just fine tune an existing pre-trained Keras model, set the value like _/data/model/traffic_signs_python35.h5_.
+    * When one wants to train starting from: 
+        * imagenet weights just use as parameter _--imagenet-weights_. 
+        * from custom Keras weights just use for _WEIGHTS_ parameter a value like _/data/model/traffic_signs_python35.h5_ and for scripts the parameter _--weights $WEIGHTS_ instead of _--imagenet-weights_.  
     * For _TRAIN_PATH_ parameter set the value as _/data/train_data_.  
     * For _VALIDATION_PATH_ parameter set the value  _/data/train_data_.  
    For a more accurate evaluation during training phase you can split the train data in train and validation dataset.  
@@ -46,7 +46,7 @@ We assume that everything that is going to run, will run from a docker container
 
 1. Edit _predict.sh_ script located in the current folder of the running docker container: `nano predict.sh`  
     * For _WEIGHTS_ parameter:  
-        * set the path to the trained model file, like _/data/model/traffic_signs_python35.h5_.  
+        * set the path to the trained model file, like _/data/model/retinanet_resnet50_traffic_signs_v002.pb_.  
     * For _TRAIN_META_FILE_ set the value: _/data/train_data/rois.bin_  
     * _INPUT_PATH_ is the folder containing the images you want to use for your detections. Set its value to your's validation dataset or to _/data/test_data_.  
     * _THRESHOLD_FILE_ is a path to a json file containing confidence thresholds per class. The parameter's value can be set to:  

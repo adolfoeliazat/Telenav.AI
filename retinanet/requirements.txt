@@ -1,5 +1,5 @@
-tensorflow==1.6.0
-Keras==2.1.2
+tensorflow==1.7.0
+Keras==2.1.5
 tqdm==4.19.4
 numpy==1.13.3
 futures==3.2.0

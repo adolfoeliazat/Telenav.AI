@@ -48,7 +48,7 @@ class TrafficSignsGenerator(Generator):
     def __init__(
             self,
             base_dir,
-            image_data_generator,
+            transform_generator,
             **kwargs
     ):
         self.logger = logging.getLogger(__name__)
@@ -60,7 +60,7 @@ class TrafficSignsGenerator(Generator):
         self.image_names = [filename for filename in self.rois_dict().keys() if os.path.isfile(os.path.join(self.base_dir, filename))]
         self.image_data = self.get_image_data()
         self.logger.info("Classes: {}".format(self.labels()))
-        super().__init__(image_data_generator, **kwargs)
+        super().__init__(transform_generator, **kwargs)
         self.logger.info('Dataset was initialised.')
 
     def rois_dict(self):

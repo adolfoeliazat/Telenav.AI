@@ -23,8 +23,7 @@ import apollo_python_common.proto_api as meta
 from retinanet.traffic_signs_generator import RoisLabels
 from retinanet.utils import predict_folder, get_graph_name
 
-RESOLUTIONS = [800, 2592]
-# RESOLUTIONS = [1920]
+RESOLUTIONS = [800, 1920]
 
 
 def __parse_args(args):
@@ -83,7 +82,7 @@ def get_model_for_pred(config):
         gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=config.per_process_gpu_memory_fraction,
                                     allow_growth=config.allow_growth_gpu_memory)
     else:
-        gpu_options = tf.GPUOptions()
+        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.67)
 
     logger.info('Loading model from {}'.format(weights_file))
     if weights_file_extension.lower() == ".h5":

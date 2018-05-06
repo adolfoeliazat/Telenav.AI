@@ -27,11 +27,12 @@ import apollo_python_common.io_utils as io_utils
 from apollo_python_common.rectangle import Rectangle
 import apollo_python_common.proto_api as meta
 
-
 RESOLUTIONS_COLORS = [(0, 0, 255), (255, 0, 0), (255,255,0), (0,255,255), (255,0,255)]
 VP_DETECTOR = VanishingPointDetector()
 VP_CONFIDENCE_THRESHOLD = 0.2
 VP_SIGNIFICATIVE_Y_PERCENTAGE = 1.15
+MIN_SCORE_THRESHOLD = 0.05
+MAX_DETECTIONS=300
 
 
 def predict_folder(model, input_folder, output_folder, resolutions, rois_labels, score_threshold_per_class,
@@ -103,17 +104,37 @@ def get_graph_name():
 
 def get_predicted_detections(model, images_for_pred):
     if type(model) is Keras_Model:
-        _, _, detections_for_all_images = model.predict(images_for_pred)
+        _, _, boxes, nms_classification = model.predict(images_for_pred)
+
     elif type(model) is Tensorflow_Session:
         session = model
         graph_name = get_graph_name()
         input_tensor = session.graph.get_tensor_by_name("{}/input_1:0".format(graph_name))
-        output_tensor = session.graph.get_tensor_by_name("{}/output2:0".format(graph_name))
-        detections_for_all_images = session.run(output_tensor,
-                              feed_dict={input_tensor: images_for_pred})
+        regression = session.graph.get_tensor_by_name("{}/output0:0".format(graph_name))
+        classification = session.graph.get_tensor_by_name("{}/output1:0".format(graph_name))
+        clipped_boxes = session.graph.get_tensor_by_name("{}/output2:0".format(graph_name))
+        nms = session.graph.get_tensor_by_name("{}/output3:0".format(graph_name))
+        boxes, nms_classification = session.run([clipped_boxes, nms], feed_dict={input_tensor: images_for_pred})
     else:
         raise Exception('model type {} not supported'.format(str(type(model))))
-    return detections_for_all_images
+
+    all_boxes, all_scores, all_labels = list(), list(), list()
+
+    for idx_img in range(len(images_for_pred)):
+        # select indices which have a score above the threshold
+        indices = np.where(nms_classification[idx_img, :, :] > MIN_SCORE_THRESHOLD)
+        # select those scores
+        scores = nms_classification[idx_img][indices]
+        # find the order with which to sort the scores
+        scores_sort = np.argsort(-scores)[:MAX_DETECTIONS]
+        # select detections
+        image_boxes = boxes[idx_img, indices[0][scores_sort], :]
+        image_scores = nms_classification[idx_img, indices[0][scores_sort], indices[1][scores_sort]]
+        image_predicted_labels = indices[1][scores_sort]
+        all_boxes.append(image_boxes)
+        all_scores.append(image_scores)
+        all_labels.append(image_predicted_labels)
+    return all_boxes, all_scores, all_labels
 
 
 def predict_images_on_batch(images, model, rois_labels, resolutions, score_threshold_per_class, log_level):
@@ -128,12 +149,12 @@ def predict_images_on_batch(images, model, rois_labels, resolutions, score_thres
             scales.append(scale)
             images_for_pred.append(np.expand_dims(image_resized, axis=0))
         images_for_pred = np.vstack(images_for_pred)
-        detections_for_all_images = get_predicted_detections(model, images_for_pred)
+        all_images_boxes, all_images_scores, all_images_labels = get_predicted_detections(model, images_for_pred)
         for i in range(len(images)):
-            boxes = detections_for_all_images[i, :, :4] / scales[i]
+            boxes = all_images_boxes[i] / scales[i]
             resolution = np.full(len(boxes), resolution)
-            predicted_labels = np.argmax(detections_for_all_images[i, :, 4:], axis=1)
-            scores = detections_for_all_images[i, np.arange(detections_for_all_images.shape[1]), 4 + predicted_labels]
+            predicted_labels = all_images_labels[i]
+            scores = all_images_scores[i]
             predicted_label_names = [rois_labels.label_to_name(label) for label in predicted_labels]
             all_boxes.setdefault(i, []).append(boxes)
             all_resolutions.setdefault(i, []).append(resolution)
@@ -165,11 +186,10 @@ def predict_one_image(image_pred, model, rois_labels, resolutions, score_thresho
 
     for resolution in resolutions:
         image_resized, scale = get_regular_sized_image(image_pred, max_image_shape=(resolution, resolution, 3))
-        detections = get_predicted_detections(model, np.expand_dims(image_resized, axis=0))
-        boxes = detections[0, :, :4] / scale
+        all_imgs_boxes, all_imgs_scores, all_imgs_labels = get_predicted_detections(model, np.expand_dims(image_resized, axis=0))
+        boxes, scores, predicted_labels = all_imgs_boxes[0], all_imgs_scores[0], all_imgs_labels[0]
+        boxes = boxes / scale
         resolution = np.full(len(boxes), resolution)
-        predicted_labels = np.argmax(detections[0, :, 4:], axis=1)
-        scores = detections[0, np.arange(detections.shape[1]), 4 + predicted_labels]
         predicted_label_names = [rois_labels.label_to_name(label) for label in predicted_labels]
         all_boxes.append(boxes)
         all_resolutions.append(resolution)
@@ -206,24 +226,36 @@ def get_preds_in_common_format(all_predictions, algorithm, algorithm_version):
         image_proto.metadata.region = ""
         image_proto.metadata.trip_id = ""
         image_proto.metadata.image_index = 0
-        add_detections_to_image_proto(algorithm, algorithm_version, image_proto, boxes, scores, label_names)
+        add_detections_to_img_proto(algorithm, algorithm_version, image_proto, boxes, scores, label_names, 0)
     return metadata
 
 
-def add_detections_to_image_proto(algorithm, algorithm_version, image_proto, boxes, scores, label_names):
+def add_detections_to_img_proto(algorithm, algorithm_version, image_proto, boxes, scores, label_names, min_side_size):
     for box, score, label_name in zip(boxes, scores, label_names):
-        roi = image_proto.rois.add()
-        roi.type = meta.get_roi_type_value(label_name)
-        roi.rect.tl.row = int(box[1])
-        roi.rect.tl.col = int(box[0])
-        roi.rect.br.row = int(box[3])
-        roi.rect.br.col = int(box[2])
-        roi.manual = False
-        roi.algorithm = algorithm
-        roi.algorithm_version = algorithm_version
-        detection = roi.detections.add()
-        detection.type = roi.type
-        detection.confidence = score
+        img_height = image_proto.sensor_data.img_res.height if image_proto.sensor_data.img_res.height > 0 else sys.maxsize
+        img_width = image_proto.sensor_data.img_res.width if image_proto.sensor_data.img_res.width > 0 else sys.maxsize
+        tl_row = int(box[1]) if box[1] > 0 else 0
+        tl_col = int(box[0]) if box[0] > 0 else 0
+        br_row = int(box[3]) if box[3] < img_height else img_height
+        br_col = int(box[2]) if box[2] < img_width else img_width
+        if (br_col - tl_col) >= min_side_size and (br_row - tl_row) >= min_side_size:
+            add_roi_to_img_proto(image_proto, algorithm, algorithm_version, label_name, score,
+                                 tl_row, tl_col, br_col, br_row)
+
+
+def add_roi_to_img_proto(image_proto, algorithm, algorithm_version, label_name, score, tl_row, tl_col, br_col, br_row):
+    roi = image_proto.rois.add()
+    roi.type = meta.get_roi_type_value(label_name)
+    roi.rect.tl.row = tl_row
+    roi.rect.tl.col = tl_col
+    roi.rect.br.row = br_row
+    roi.rect.br.col = br_col
+    roi.manual = False
+    roi.algorithm = algorithm
+    roi.algorithm_version = algorithm_version
+    detection = roi.detections.add()
+    detection.type = roi.type
+    detection.confidence = score
 
 
 def non_max_suppression(boxes, scores, resolutions, predicted_label_names, score_threshold_per_class,

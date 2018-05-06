@@ -19,7 +19,7 @@ import numpy as np
 
 def anchor_targets_bbox(
     image_shape,
-    boxes,
+    annotations,
     num_classes,
     mask_shape=None,
     negative_overlap=0.4,
@@ -31,9 +31,9 @@ def anchor_targets_bbox(
     # label: 1 is positive, 0 is negative, -1 is dont care
     labels = np.ones((anchors.shape[0], num_classes)) * -1
 
-    if boxes.shape[0]:
-        # obtain indices of gt boxes with the greatest overlap
-        overlaps             = compute_overlap(anchors, boxes[:, :4])
+    if annotations.shape[0]:
+        # obtain indices of gt annotations with the greatest overlap
+        overlaps             = compute_overlap(anchors, annotations[:, :4])
         argmax_overlaps_inds = np.argmax(overlaps, axis=1)
         max_overlaps         = overlaps[np.arange(overlaps.shape[0]), argmax_overlaps_inds]
 
@@ -41,25 +41,67 @@ def anchor_targets_bbox(
         labels[max_overlaps < negative_overlap, :] = 0
 
         # compute box regression targets
-        boxes            = boxes[argmax_overlaps_inds]
-        bbox_reg_targets = bbox_transform(anchors, boxes)
+        annotations = annotations[argmax_overlaps_inds]
 
         # fg label: above threshold IOU
         positive_indices = max_overlaps >= positive_overlap
         labels[positive_indices, :] = 0
-        labels[positive_indices, boxes[positive_indices, 4].astype(int)] = 1
+        labels[positive_indices, annotations[positive_indices, 4].astype(int)] = 1
     else:
         # no annotations? then everything is background
         labels[:] = 0
-        bbox_reg_targets = np.zeros_like(anchors)
+        annotations = np.zeros_like(anchors)
 
-    # ignore boxes outside of image
+    # ignore annotations outside of image
     mask_shape         = image_shape if mask_shape is None else mask_shape
     anchors_centers    = np.vstack([(anchors[:, 0] + anchors[:, 2]) / 2, (anchors[:, 1] + anchors[:, 3]) / 2]).T
     indices            = np.logical_or(anchors_centers[:, 0] >= mask_shape[1], anchors_centers[:, 1] >= mask_shape[0])
     labels[indices, :] = -1
 
-    return labels, bbox_reg_targets
+    return labels, annotations, anchors
+
+
+def layer_shapes(image_shape, model):
+    """Compute layer shapes given input image shape and the model.
+
+    :param image_shape:
+    :param model:
+    :return:
+    """
+    shape = {
+        model.layers[0].name: (None,) + image_shape,
+    }
+
+    for layer in model.layers[1:]:
+        nodes = layer._inbound_nodes
+        for node in nodes:
+            inputs = [shape[lr.name] for lr in node.inbound_layers]
+            if not inputs:
+                continue
+            shape[layer.name] = layer.compute_output_shape(inputs[0] if len(inputs) == 1 else inputs)
+
+    return shape
+
+
+def make_shapes_callback(model):
+    def get_shapes(image_shape, pyramid_levels):
+        shape = layer_shapes(image_shape, model)
+        image_shapes = [shape["P{}".format(level)][1:3] for level in pyramid_levels]
+        return image_shapes
+
+    return get_shapes
+
+
+def guess_shapes(image_shape, pyramid_levels):
+    """Guess shapes based on pyramid levels.
+
+    :param image_shape:
+    :param pyramid_levels:
+    :return:
+    """
+    image_shape = np.array(image_shape[:2])
+    image_shapes = [(image_shape + 2 ** x - 1) // (2 ** x) for x in pyramid_levels]
+    return image_shapes
 
 
 def anchors_for_shape(
@@ -68,7 +110,8 @@ def anchors_for_shape(
     ratios=None,
     scales=None,
     strides=None,
-    sizes=None
+    sizes=None,
+    shapes_callback=None,
 ):
     if pyramid_levels is None:
         pyramid_levels = [3, 4, 5, 6, 7]
@@ -81,17 +124,15 @@ def anchors_for_shape(
     if scales is None:
         scales = np.array([2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)])
 
-    # skip the first two levels
-    image_shape = np.array(image_shape[:2])
-    for i in range(pyramid_levels[0] - 1):
-        image_shape = (image_shape + 1) // 2
+    if shapes_callback is None:
+        shapes_callback = guess_shapes
+    image_shapes = shapes_callback(image_shape, pyramid_levels)
 
     # compute anchors over all pyramid levels
     all_anchors = np.zeros((0, 4))
     for idx, p in enumerate(pyramid_levels):
-        image_shape     = (image_shape + 1) // 2
         anchors         = generate_anchors(base_size=sizes[idx], ratios=ratios, scales=scales)
-        shifted_anchors = shift(image_shape, strides[idx], anchors)
+        shifted_anchors = shift(image_shapes[idx], strides[idx], anchors)
         all_anchors     = np.append(all_anchors, shifted_anchors, axis=0)
 
     return all_anchors
@@ -172,15 +213,19 @@ def bbox_transform(anchors, gt_boxes, mean=None, std=None):
     elif not isinstance(std, np.ndarray):
         raise ValueError('Expected std to be a np.ndarray, list or tuple. Received: {}'.format(type(std)))
 
-    anchor_widths  = anchors[:, 2] - anchors[:, 0] + 1.0
-    anchor_heights = anchors[:, 3] - anchors[:, 1] + 1.0
+    anchor_widths  = anchors[:, 2] - anchors[:, 0]
+    anchor_heights = anchors[:, 3] - anchors[:, 1]
     anchor_ctr_x   = anchors[:, 0] + 0.5 * anchor_widths
     anchor_ctr_y   = anchors[:, 1] + 0.5 * anchor_heights
 
-    gt_widths  = gt_boxes[:, 2] - gt_boxes[:, 0] + 1.0
-    gt_heights = gt_boxes[:, 3] - gt_boxes[:, 1] + 1.0
+    gt_widths  = gt_boxes[:, 2] - gt_boxes[:, 0]
+    gt_heights = gt_boxes[:, 3] - gt_boxes[:, 1]
     gt_ctr_x   = gt_boxes[:, 0] + 0.5 * gt_widths
     gt_ctr_y   = gt_boxes[:, 1] + 0.5 * gt_heights
+
+    # clip widths to 1
+    gt_widths  = np.maximum(gt_widths, 1)
+    gt_heights = np.maximum(gt_heights, 1)
 
     targets_dx = (gt_ctr_x - anchor_ctr_x) / anchor_widths
     targets_dy = (gt_ctr_y - anchor_ctr_y) / anchor_heights
@@ -205,15 +250,15 @@ def compute_overlap(a, b):
     -------
     overlaps: (N, K) ndarray of overlap between boxes and query_boxes
     """
-    area = (b[:, 2] - b[:, 0] + 1) * (b[:, 3] - b[:, 1] + 1)
+    area = (b[:, 2] - b[:, 0]) * (b[:, 3] - b[:, 1])
 
-    iw = np.minimum(np.expand_dims(a[:, 2], axis=1), b[:, 2]) - np.maximum(np.expand_dims(a[:, 0], 1), b[:, 0]) + 1
-    ih = np.minimum(np.expand_dims(a[:, 3], axis=1), b[:, 3]) - np.maximum(np.expand_dims(a[:, 1], 1), b[:, 1]) + 1
+    iw = np.minimum(np.expand_dims(a[:, 2], axis=1), b[:, 2]) - np.maximum(np.expand_dims(a[:, 0], 1), b[:, 0])
+    ih = np.minimum(np.expand_dims(a[:, 3], axis=1), b[:, 3]) - np.maximum(np.expand_dims(a[:, 1], 1), b[:, 1])
 
     iw = np.maximum(iw, 0)
     ih = np.maximum(ih, 0)
 
-    ua = np.expand_dims((a[:, 2] - a[:, 0] + 1) * (a[:, 3] - a[:, 1] + 1), axis=1) + area - iw * ih
+    ua = np.expand_dims((a[:, 2] - a[:, 0]) * (a[:, 3] - a[:, 1]), axis=1) + area - iw * ih
 
     ua = np.maximum(ua, np.finfo(float).eps)
 
