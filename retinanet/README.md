@@ -13,8 +13,10 @@ This code was tested with:
 
 **A. Get the artifacts**
  
-Download the zip file containing datasets from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/telenav_ai_dataset.zip). Then extract its content into a local folder: _{ARTIFACTS_PATH}_.
-After that, in the _{ARTIFACTS_PATH}_ folder should exist the following folders: _train_data_ and _test_data_.
+Download:
+ * the zip file containing datasets from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/telenav_ai_dataset.zip). Then extract its content into a local folder: _{ARTIFACTS_PATH}_.
+After that, in the _{ARTIFACTS_PATH}_ folder should exist the following folders: _train_data_ and _test_data_. Please read carefully the dataset license enclosed in the zip file.
+ * the zip file containing pre-trained model from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/model_retinanet.zip). Then extract its content into a local folder _{ARTIFACTS_PATH}/model_.
 
 **B. Installation**
 
