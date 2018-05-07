@@ -4,7 +4,7 @@ CUDA_VISIBLE_DEVICES="0"
 WEIGHTS='/data/models/retinanet_resnet50_traffic_signs_v002.pb'
 TRAIN_META_FILE='/data/train_data/rois.bin'
 INPUT_PATH='/data/test_data'
-THRESHOLD_FILE="/data/models/classes_thresholds.json"
+THRESHOLD_FILE="/data/model/classes_thresholds.json"
 LOWEST_SCORE_THRESHOLD="0.5"
 OUTPUT_PATH='/data/output'
 
