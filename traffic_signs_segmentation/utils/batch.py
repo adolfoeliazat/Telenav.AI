@@ -14,7 +14,7 @@ from multiprocessing.pool import ThreadPool
 
 import logging.config
 import configuration
-import image
+import traffic_signs_segmentation.utils.image as image
 import utils
 
 BatchElem = namedtuple('Batch', ['image_path', 'scale_factors', 'image_data'])
