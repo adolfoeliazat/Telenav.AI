@@ -8,9 +8,9 @@ In order to support the mapping community around the world, we have decided to o
 
 **Datasets**
 
-The datasets are part of our Object Detection Competition LINK WHEN READY. It contains over 45 000 manually annotated images containing more than 55 000 signs divided in 23 different classes such as : traffic signals, stop signs, speed limits and turn restrictions.
+The datasets are part of our Object Detection Competition. You can find the dataset [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/telenav_ai_dataset.zip). It contains over 45 000 manually annotated images containing more than 55 000 signs divided in 23 different classes such as : traffic signals, stop signs, speed limits and turn restrictions.
 
-A smaller version of the dataset, containing only 1000 images, can be found here LINK WHEN READY
+A smaller version of the dataset, containing only 1000 images, can be found [here ](https://s3.eu-central-1.amazonaws.com/telenav.ai/telenav_ai_dataset_sample.zip)
 
 **Code** 
 
