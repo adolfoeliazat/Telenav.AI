@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 CUDA_VISIBLE_DEVICES="0"
-WEIGHTS='/data/models/retinanet_resnet50_traffic_signs_v002.pb'
+WEIGHTS='/data/model/retinanet_resnet50_traffic_signs_v002.pb'
 TRAIN_META_FILE='/data/train_data/rois.bin'
 INPUT_PATH='/data/test_data'
 THRESHOLD_FILE="/data/model/classes_thresholds.json"
