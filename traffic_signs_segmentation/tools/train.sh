@@ -34,7 +34,7 @@ SEGMENTATION_SNAPSHOT_INTERVAL=1
 
 cd $TRAFFIC_SIGNS_SEGMENTATION_FOLDER
 
-PYTHONPATH="${PYTHONPATH}../:../apollo_python_common/:../apollo_python_common/protobuf/:./utils/:./"
+PYTHONPATH="${PYTHONPATH}:../:../apollo_python_common/:../apollo_python_common/protobuf/:./utils/:./"
 export PYTHONPATH
 
 python3 $UTILS/edit_caffe_classification_train_proto.py --original_proto $CLASSIFICATION_TRAIN_PROTO --database_path $CLASSIFICATION_PATH --out_path $MODEL_OUT_PATH

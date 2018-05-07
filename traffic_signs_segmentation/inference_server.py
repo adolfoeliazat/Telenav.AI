@@ -20,7 +20,7 @@ import apollo_python_common.proto_api as proto_api
 import batch
 import utils
 import network_setup
-import image as image_operation
+import traffic_signs_segmentation.utils.image as image_operation
 import configuration
 import logging
 import logging.config

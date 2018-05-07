@@ -14,6 +14,7 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
  - Consider that *{ROOT}* is the path to *Telenav.AI* repository and copy the model in *{ROOT}/traffic\_signs\_segmentation/config*
  - Download the zip file containing datasets from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/telenav_ai_dataset.zip). Then extract its content into a local folder: _{ARTIFACTS_PATH}_.
    After that, in the _{ARTIFACTS_PATH}_ folder should exist the following folders: _train_data_ and _test_data_.
+ - Download the zip file containing the pre-trained model from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/model_traffic_signs_segmentation.zip). Then extract its content in *{ROOT}/traffic\_signs\_segmentation/config* 
  
  **Config Folder Content :**
  
@@ -51,7 +52,7 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
  3.1 Test
  
  - After training */data/caffe_model/* dir will contain snapshots with the models for segmentation and classification
- - Edit *Telenav.AI/traffic_signs_segmentation/inference_server.py*: replace **CLASSIFICATION_MODEL**, **SEGMENTATION_MODEL**, **MEAN**, **MEAN_BLOB** constants with the paths to the previously trained models
+ - Edit *Telenav.AI/traffic_signs_segmentation/inference_server.py*: replace **CLASSIFICATION_MODEL**, **SEGMENTATION_MODEL**, **MEAN**, **MEAN_BLOB** constants with the paths to the previously trained models or let them as there are to test the default model
  - Edit *Telenav.AI/traffic_signs_segmentation/tools/predict.sh* replace: **INPUT_PATH** with the folder containing the images to test and **OUTPUT_PATH** with the folder that will contain the generated **rois.bin**
  - Run ***Telenav.AI/traffic_signs_segmentation/tools/predict.sh*** to generate predictions with your trained model
  
