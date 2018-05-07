@@ -38,7 +38,7 @@ We assume that everything that is going to run, will run from a docker container
 1. Edit _train.sh_ script located in the current folder of the running docker container: `nano train.sh`  
     * When one wants to train starting from: 
         * imagenet weights just use as parameter _--imagenet-weights_. 
-        * from custom Keras weights just use for _WEIGHTS_ parameter a value like _/data/model/traffic_signs_python35.h5_ and for scripts the parameter _--weights $WEIGHTS_ instead of _--imagenet-weights_.  
+        * from custom Keras weights just use for _WEIGHTS_ parameter a value like _/data/model/retinanet_resnet50_traffic_signs_v002.h5_ and for scripts the parameter _--weights $WEIGHTS_ instead of _--imagenet-weights_.  
     * For _TRAIN_PATH_ parameter set the value as _/data/train_data_.  
     * For _VALIDATION_PATH_ parameter set the value  _/data/train_data_.  
    For a more accurate evaluation during training phase you can split the train data in train and validation dataset.  
