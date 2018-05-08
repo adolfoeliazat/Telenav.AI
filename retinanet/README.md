@@ -27,15 +27,15 @@ We assume that everything that is going to run, will run from a docker container
 2. build the docker image used for development:  
     * `chmod +x ./docker_build_image_retinanet_mq.sh`  
     * `sh ./docker_build_image_retinanet_mq.sh`  
-3. run the container: `sudo nvidia-docker run -v {ARTIFACTS_PATH}:/data/ --name retinanet -it telenav/retinanet_mq /bin/bash`  
-    It will start the docker container and a new BaSH session into it.  
+3. run the container: `nvidia-docker run -v {ARTIFACTS_PATH}:/data/ --name retinanet -it telenav/retinanet_mq /bin/bash`  
+    It will start the docker container and a new bash session into it.  
 4. run in container:
     * `sudo chmod 777 /data/`
         
 
 **C. Training** 
 
-1. Edit _train.sh_ script located in the current folder of the running docker container: `nano train.sh`  
+1. Edit _train.sh_ script located in the current folder of the running docker container: `train.sh`  
     * When one wants to train starting from: 
         * imagenet weights just use as parameter _--imagenet-weights_. 
         * from custom Keras weights just use for _WEIGHTS_ parameter a value like _/data/model/retinanet_resnet50_traffic_signs_v002.h5_ and for scripts the parameter _--weights $WEIGHTS_ instead of _--imagenet-weights_.  
@@ -46,7 +46,7 @@ We assume that everything that is going to run, will run from a docker container
 
 **D. Predicting** 
 
-1. Edit _predict.sh_ script located in the current folder of the running docker container: `nano predict.sh`  
+1. Edit _predict.sh_ script located in the current folder of the running docker container: `predict.sh`  
     * For _WEIGHTS_ parameter:  
         * set the path to the trained model file, like _/data/model/retinanet_resnet50_traffic_signs_v002.pb_.  
     * For _TRAIN_META_FILE_ set the value: _/data/train_data/rois.bin_  
@@ -60,7 +60,7 @@ We assume that everything that is going to run, will run from a docker container
 
 **E. Basic evaluation** 
 
-1. Edit _evaluate.sh_ script located in the current folder of the running docker container: _nano evaluate.sh_  
+1. Edit _evaluate.sh_ script located in the current folder of the running docker container: _evaluate.sh_  
     * For _TEST_ROI_ parameter: set the path to the file containing ground truth ROIs for traffic signs of yours validation dataset (e.g. _/data/train_data/rois.bin_).  
     * For _PREDICT_ROI_ parameter: set the path to the file containing serialized detections in protobuf format generated at step D in _OUTPUT_PATH_ folder (e.g. _./output/rois_retinanet.bin_).  
     * _RESULT_FILE_ parameter indicates the text file where evaluations metrics will be saved.  
