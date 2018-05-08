@@ -14,37 +14,42 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
  - Consider that *{ROOT}* is the path to *Telenav.AI* repository and copy the model in *{ROOT}/traffic\_signs\_segmentation/config*
  - Download the zip file containing datasets from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/telenav_ai_dataset.zip). Then extract its content into a local folder: _{ARTIFACTS_PATH}_.
    After that, in the _{ARTIFACTS_PATH}_ folder should exist the following folders: _train_data_ and _test_data_.
- - Download the zip file containing the pre-trained model from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/model_traffic_signs_segmentation.zip). Then extract its content in *{ROOT}/traffic\_signs\_segmentation/config* 
- 
+ - Download the zip file containing the already trained traffic signs segmentation model from [here](https://s3.eu-central-1.amazonaws.com/telenav.ai/model_traffic_signs_segmentation.zip). Then extract the files in *{ROOT}/traffic\_signs\_segmentation/config* 
+   
+   
  **Config Folder Content :**
  
 |  file name|  details|
 |--|--|
 |classification_solver.prototxt | classification solver file
 |classification_train_val.prototxt | classification network used to for training. A modified Alexnet with Xavier initialization
-|net.protoxt|segmentation network used for inference
-|segmentation_solver.prototxt|segmentation network solver
-|segmentation_train_val.prototxt|segmentation network used for training: https://github.com/shelhamer/fcn.berkeleyvision.org/tree/master/voc-fcn8s
-|seggmodel.caffemodel|trained segmentation model
+|net.protoxt | segmentation network used for inference
+|segmentation_solver.prototxt | segmentation network solver
+|segmentation_train_val.prototxt | segmentation network used for training: https://github.com/shelhamer/fcn.berkeleyvision.org/tree/master/voc-fcn8s
+|segmodel.caffemodel | trained traffic signs segmentation model
+|mean.blob | mean image blob data
+|mean.npy | mean image numpy data
+|fcn8s-heavy-pascal.caffemodel | pre-trained fcn pascal model
 
 ## 2. Train model
 
 2.1 Create a docker container with Caffe
 
- -  Run ***Telenav.AI/docker\_build\_image\_traffic\_signs\_segmentation_train.sh***
+ -  Change directory to {ROOT}
+ -  Run ***./docker\_build\_image\_traffic\_signs\_segmentation_train.sh***
  -  Run ***sudo nvidia-docker run --name traffic\_signs\_segmentation --net=host --rm -ti 
   -v {Root}:/home/Telenav.AI -v {ARTIFACTS_PATH}/train_data:/data/input_data -v {ARTIFACTS_PATH}/test_data:/data/test_data telenav/traffic\_signs\_segmentation_train***  
 
 2.2 Create dataset
   
  - Inside the docker container go to ***/home/Telenav.AI/traffic_signs_segmentation/tools/*** 
- - Run ***create_dataset.sh***
+ - Run ***./create_dataset.sh***, expect ~5h for the entire dataset 
  - This will create the lmdb files needed for training in */data/caffe_model/*
 
 2.3 Train
  
  - Inside the docker container go to ***/home/Telenav.AI/traffic_signs_segmentation/tools/*** 
- - Run ***train.sh***
+ - Run ***./train.sh***
  - Training may very depending on the train dataset size, around 1 week for 30 epochs and 20k images. Intermediary models are saved in */data/caffe_model/*
  
 ## 3. Test and evaluate
@@ -52,14 +57,16 @@ http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel
  3.1 Test
  
  - After training */data/caffe_model/* dir will contain snapshots with the models for segmentation and classification
- - Edit *Telenav.AI/traffic_signs_segmentation/inference_server.py*: replace **CLASSIFICATION_MODEL**, **SEGMENTATION_MODEL**, **MEAN**, **MEAN_BLOB** constants with the paths to the previously trained models or let them as there are to test the default model
- - Edit *Telenav.AI/traffic_signs_segmentation/tools/predict.sh* replace: **INPUT_PATH** with the folder containing the images to test and **OUTPUT_PATH** with the folder that will contain the generated **rois.bin**
- - Run ***Telenav.AI/traffic_signs_segmentation/tools/predict.sh*** to generate predictions with your trained model
+ - Edit *{ROOT}/traffic_signs_segmentation/inference_server.py*: replace **CLASSIFICATION_MODEL**, **SEGMENTATION_MODEL**, **MEAN**, **MEAN_BLOB** constants with the paths to the previously trained models or let them as there are to test the default model
+ - Edit *{ROOT}/traffic_signs_segmentation/tools/predict.sh* replace: **INPUT_PATH** with the folder containing the images to test for example */data/test_data*/ or yours validation dataset **OUTPUT_PATH** with the folder that will contain the generated **rois.bin**
+ - Inside the docker container go to ***/home/Telenav.AI/traffic_signs_segmentation/tools/***
+ - Run ***./predict.sh*** to generate predictions with your trained model
  
  3.2 Evaluate
  
- - Edit *Telenav.AI/traffic_signs_segmentation/tools/evaluate.sh*:
-	 * For **TEST_ROI** parameter: set the path to the file containing ground truth ROIs for traffic signs in the test or validation dataset (e.g. /data/test_data/rois.bin).
+ - Edit *{ROOT}/traffic_signs_segmentation/tools/evaluate.sh*:
+	 * For **TEST_ROI** parameter: set the path to the file containing ground truth ROIs for traffic signs in your validation dataset
 	 * For **PREDICT_ROI** parameter: set the path to the file containing serialized detections in protobuf format generated at step 2.3 in **OUTPUT_PATH** folder
 	 * **RESULT_FILE** parameter indicates the text file where evaluations metrics will be saved.
- - Run ***Telenav.AI/traffic_signs_segmentation/tools/evaluate.sh***
+ - Inside the docker container go to ***/home/Telenav.AI/traffic_signs_segmentation/tools/***
+ - Run ***./evaluate.sh***
