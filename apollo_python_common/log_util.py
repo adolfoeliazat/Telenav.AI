@@ -11,4 +11,4 @@ import os
 
 
 def config(log_file_name):
-    pass
+    logging.basicConfig(level=logging.INFO)
