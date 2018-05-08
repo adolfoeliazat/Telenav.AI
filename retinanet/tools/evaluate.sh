@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 TEST_ROI='/data/train_data/rois.bin'
-PREDICT_ROI='rois_retinanet.bin'
+PREDICT_ROI='/data/output/rois_retinanet.bin'
 RESULT_FILE='statistics.txt'
 
 echo 'Parameters:'
