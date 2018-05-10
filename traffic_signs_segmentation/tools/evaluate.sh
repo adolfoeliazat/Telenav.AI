@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 TEST_ROI='/data/output/rois.bin'
-PREDICT_ROI='/data/test_data/rois.bin'
+PREDICT_ROI='/data/caffe_model/test/rois.bin'
 RESULT_FILE='statistics.txt'
 
 echo 'Parameters:'
