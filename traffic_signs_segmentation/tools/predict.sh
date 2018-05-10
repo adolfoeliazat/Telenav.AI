@@ -2,7 +2,7 @@
 CUDA_VISIBLE_DEVICES=0
 
 # Input images folder
-INPUT_PATH=/data/test_data
+INPUT_PATH=/data/caffe_model/test
 # Output results path
 OUTPUT_PATH=/data/output
 
